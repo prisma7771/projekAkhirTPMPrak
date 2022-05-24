@@ -16,19 +16,9 @@ class SharedPreference {
     getPref.remove('username');
   }
 
-  void setHistory(String history) async {
-    SharedPreferences getPref = await _pref;
-    getPref.setString('history', history);
-  }
   void setImage(String image) async {
     SharedPreferences getPref = await _pref;
     getPref.setString('images', image);
-  }
-
-  static Future<String> getHistory() async {
-    SharedPreferences getPref = await _pref;
-    String history = getPref.getString('history') ?? "";
-    return history;
   }
 
   static Future<String> getImage() async {

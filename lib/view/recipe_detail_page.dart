@@ -1,7 +1,15 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:projek_mealdb/helper/hive_database_fav.dart';
+import 'package:projek_mealdb/helper/hive_database_recipe.dart';
 import 'package:projek_mealdb/helper/shared_preference.dart';
+import 'package:projek_mealdb/hive_model/myfavorite_model.dart';
 import 'package:projek_mealdb/model/meal_detail_model.dart';
+import 'package:projek_mealdb/model/meal_list_model.dart';
 import 'package:projek_mealdb/source/meal_source.dart';
 import 'package:projek_mealdb/view/meal_category.dart';
 
@@ -9,23 +17,25 @@ import '../main.dart';
 import 'home_page.dart';
 import 'meal_list_page.dart';
 
-class RandomDetailPage extends StatefulWidget {
-  const RandomDetailPage({Key? key}) : super(key: key);
+class MyRecipeDetailPage extends StatefulWidget {
+  final List<dynamic> list;
+  final int index;
+  const MyRecipeDetailPage({Key? key, required this.list, required this.index})
+      : super(key: key);
 
   @override
-  State<RandomDetailPage> createState() => _RandomDetailPageState();
+  State<MyRecipeDetailPage> createState() => _MyRecipeDetailPageState();
 }
 
-class _RandomDetailPageState extends State<RandomDetailPage> {
-  bool isFavorite = false;
-  final HiveDatabaseFav _hiveFav = HiveDatabaseFav();
+class _MyRecipeDetailPageState extends State<MyRecipeDetailPage> {
+  final HiveDatabaseRecipe _hiveFav = HiveDatabaseRecipe();
+  late int index = widget.index;
+
   @override
   Widget build(BuildContext context) {
-    _hiveFav.showAll();
-    debugPrint("${_hiveFav.getLengthAll()}");
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Our Lucky Recipe!!!"),
+        title: Text("Details of ${widget.list[index].nameMeal}".toTitleCase()),
         actions: [
           IconButton(
             onPressed: () async {
@@ -49,46 +59,21 @@ class _RandomDetailPageState extends State<RandomDetailPage> {
   }
 
   Widget _buildDetailMeal() {
-    return FutureBuilder(
-        future: MealSource.instance.loadRandomDetail(),
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if (snapshot.hasError) {
-            return _buildErrorSection();
-          }
-          if (snapshot.hasData) {
-            MealDetail mealdetail = MealDetail.fromJson(snapshot.data);
-            return _buildSuccessSection(mealdetail);
-          }
-          return _buildLoadingSection();
-        });
-  }
-
-  Widget _buildLoadingSection() {
-    return const Center(
-      child: CircularProgressIndicator(),
-    );
-  }
-
-  Widget _buildErrorSection() {
-    return const Text("Error2");
-  }
-
-  Widget _buildSuccessSection(MealDetail data) {
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.all(8.0),
         child: Column(
           children: [
-            _buildHeader(data),
-            _buildDescription(data),
-            _buildIngredient(data),
+            _buildHeader(),
+            _buildDescription(),
+            _buildIngredient(),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildHeader(MealDetail data) {
+  Widget _buildHeader() {
     return Card(
         shape: RoundedRectangleBorder(
           side: const BorderSide(width: 5.0, color: Colors.brown),
@@ -101,37 +86,42 @@ class _RandomDetailPageState extends State<RandomDetailPage> {
               padding: const EdgeInsets.all(14.0),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(25),
-                child: Image.network(
-                  "${data.meals![0].strMealThumb}",
-                  fit: BoxFit.fill,
-                  width: 140.0,
+                child: widget.list[index].imageMeal == ""
+                    ? const CircleAvatar(
+                  radius: 65.0,
+                  child: Center(child: Text("NO IMAGE")),
+                )
+                    : CircleAvatar(
+                  backgroundColor: Colors.black,
+                  radius: 65,
+                  child: CircleAvatar(
+                    radius: 60,
+                    backgroundImage: Image.file(
+                      File("${widget.list[index].imageMeal}"),
+                      fit: BoxFit.cover,
+                    ).image,
+                  ),
                 ),
               ),
             ),
             SizedBox(
               width: MediaQuery.of(context).size.width - 200.0,
-              height: 120.0,
+              height: 140.0,
               child: Padding(
-                padding: EdgeInsets.only(left: 12.0),
+                padding: const EdgeInsets.only(left: 12.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      "${data.meals![0].strMeal}".toUpperCase(),
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic,
-                        fontSize: 20.0,
+                    Center(
+                      child: Text(
+                        "${widget.list[index].nameMeal}".toUpperCase(),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.italic,
+                          fontSize: 20.0,
+                        ),
                       ),
-                    ),
-                    Text(
-                      "Meal ID. ${data.meals![0].idMeal}",
-                      style: TextStyle(fontSize: 18.0, fontFamily: 'Koulen'),
-                    ),
-                    Text(
-                      "Meal Category: ${data.meals![0].strCategory}",
-                      style: TextStyle(fontSize: 18.0, fontFamily: 'Koulen'),
                     ),
                   ],
                 ),
@@ -141,7 +131,7 @@ class _RandomDetailPageState extends State<RandomDetailPage> {
         ));
   }
 
-  Widget _buildDescription(MealDetail data) {
+  Widget _buildDescription() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 9),
       child: Container(
@@ -166,9 +156,9 @@ class _RandomDetailPageState extends State<RandomDetailPage> {
                 ),
               ),
               Text(
-                "${data.meals![0].strInstructions}",
+                "${widget.list[index].insMeal}",
                 textAlign: TextAlign.justify,
-                style: TextStyle(fontSize: 20.0),
+                style: const TextStyle(fontSize: 20.0),
               ),
             ],
           ),
@@ -177,43 +167,13 @@ class _RandomDetailPageState extends State<RandomDetailPage> {
     );
   }
 
-  Widget _buildIngredient(MealDetail data) {
+  Widget _buildIngredient() {
     List<String> value = [
-      "${data.meals![0].strIngredient1}",
-      "${data.meals![0].strIngredient2}",
-      "${data.meals![0].strIngredient3}",
-      "${data.meals![0].strIngredient4}",
-      "${data.meals![0].strIngredient5}",
-      "${data.meals![0].strIngredient6}",
-      "${data.meals![0].strIngredient7}",
-      "${data.meals![0].strIngredient8}",
-      "${data.meals![0].strIngredient9}",
-      "${data.meals![0].strIngredient10}",
-      "${data.meals![0].strIngredient11}",
-      "${data.meals![0].strIngredient12}",
-      "${data.meals![0].strIngredient13}",
-      "${data.meals![0].strIngredient14}",
-      "${data.meals![0].strIngredient15}",
+      "${widget.list[index].ingMeal1}",
+      "${widget.list[index].ingMeal3}",
+      "${widget.list[index].ingMeal2}"
     ];
-    List<String> valueMeasure = [
-      "${data.meals![0].strMeasure1}",
-      "${data.meals![0].strMeasure2}",
-      "${data.meals![0].strMeasure3}",
-      "${data.meals![0].strMeasure4}",
-      "${data.meals![0].strMeasure5}",
-      "${data.meals![0].strMeasure6}",
-      "${data.meals![0].strMeasure7}",
-      "${data.meals![0].strMeasure8}",
-      "${data.meals![0].strMeasure9}",
-      "${data.meals![0].strMeasure10}",
-      "${data.meals![0].strMeasure11}",
-      "${data.meals![0].strMeasure12}",
-      "${data.meals![0].strMeasure13}",
-      "${data.meals![0].strMeasure14}",
-      "${data.meals![0].strMeasure15}",
-    ];
-    value.removeWhere((value) => value == "");
-    valueMeasure.removeWhere((value) => value == "");
+    debugPrint("${widget.list[index].ingMeal1}");
 
     int i = 0;
     return Padding(
@@ -269,16 +229,14 @@ class _RandomDetailPageState extends State<RandomDetailPage> {
                           child: Column(
                             children: [
                               Image.network(
-                                "https://www.themealdb.com/images/ingredients/${value[i]}-Small.png",
-                                width: 100.0,
-                              ),
+                                  "https://www.themealdb.com/images/ingredients/${value[i]}-Small.png",
+                                  width: 100.0, errorBuilder:
+                                      (BuildContext context, Object exception,
+                                          StackTrace? stackTrace) {
+                                return Text("No Image");
+                              }),
                               Text(
                                 value[i].toTitleCase(),
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 18),
-                              ),
-                              Text(
-                                valueMeasure[i].toTitleCase(),
                                 textAlign: TextAlign.center,
                                 style: TextStyle(fontSize: 18),
                               ),
@@ -296,3 +254,6 @@ class _RandomDetailPageState extends State<RandomDetailPage> {
     );
   }
 }
+//
+// var data =
+// (await GithubDataSource.instance.loadUsersData(_search));

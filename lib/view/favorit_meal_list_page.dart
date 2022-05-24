@@ -26,7 +26,6 @@ class MyFavoritPage extends StatefulWidget {
 
 class _MyFavoritPageState extends State<MyFavoritPage> {
   final HiveDatabaseFav _hiveFav = HiveDatabaseFav();
-  late String name = widget.name;
 
   @override
   Widget build(BuildContext context) {
@@ -52,12 +51,13 @@ class _MyFavoritPageState extends State<MyFavoritPage> {
   }
 
   Widget _buildList(){
+    int check = _hiveFav.getLength(widget.name);
     return Container(
       height: MediaQuery.of(context).size.height,
         child: ValueListenableBuilder(
           valueListenable: _hiveFav.listenable(),
           builder: (BuildContext context, Box<dynamic> value, Widget? child){
-            if(value.isEmpty){
+            if(value.isEmpty ||  check == 0){
               return Center(
                 child: Text("Data Kosong"),
               );
@@ -74,7 +74,6 @@ class _MyFavoritPageState extends State<MyFavoritPage> {
       height: MediaQuery.of(context).size.height,
       child: Column(
         children: [
-          SearchBar(),
           Expanded(
             child:  ListView.builder(
                 itemCount: _hiveFav.getLength(widget.name),

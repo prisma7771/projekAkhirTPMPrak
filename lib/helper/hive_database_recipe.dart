@@ -4,17 +4,17 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:projek_mealdb/hive_model/myfavorite_model.dart';
 
-class HiveDatabaseFav {
-  late Box<MyFavorite> _localDB = Hive.box<MyFavorite>("favorite");
+class HiveDatabaseRecipe {
+  late Box<MyRecipeModel> _localDB = Hive.box<MyRecipeModel>("recipe");
 
-  void addData(MyFavorite data) {
+  void addData(MyRecipeModel data) {
     _localDB.add(data);
   }
 
-  void deleteData(String? name, String? idMeal) {
+  void deleteData(String? name, String? nameMeal) {
 
     for (int i = 0; i < getLengthAll(); i++) {
-      if (name == _localDB.getAt(i)!.name && idMeal == _localDB.getAt(i)!.idMeal) {
+      if (name == _localDB.getAt(i)!.name && nameMeal == _localDB.getAt(i)!.nameMeal) {
         _localDB.deleteAt(i);
         break;
       }
@@ -23,9 +23,9 @@ class HiveDatabaseFav {
 
   void showAll(){
     for (int i = 0; i < getLengthAll(); i++) {
-        debugPrint("${_localDB.getAt(i)!.name}");
-      }
+      debugPrint("${_localDB.getAt(i)!.name}");
     }
+  }
 
   int getLength(String? username) {
     var filteredUsers = _localDB.values
@@ -43,20 +43,8 @@ class HiveDatabaseFav {
     return values;
   }
 
-  ValueListenable<Box<MyFavorite>> listenable() {
+  ValueListenable<Box<MyRecipeModel>> listenable() {
     return _localDB.listenable();
   }
 
-  bool checkFavorite(String? username, String? idMeal) {
-    bool found = false;
-    for (int i = 0; i < getLengthAll(); i++) {
-
-      if (username == _localDB.getAt(i)!.name && idMeal == _localDB.getAt(i)!.idMeal) {
-        found = true;
-        break;
-      } else {
-        found = false;
-      }
-    }return found;
-  }
 }

@@ -35,8 +35,10 @@ void initiateLocalDB() async {
   await Hive.initFlutter();
   Hive.registerAdapter<MyFavorite>(MyFavoriteAdapter());
   Hive.registerAdapter<UserAccountModel>(UserAccountModelAdapter());
+  Hive.registerAdapter<MyRecipeModel>(MyRecipeModelAdapter());
   await Hive.openBox<MyFavorite>("favorite");
   await Hive.openBox<UserAccountModel>("account");
+  await Hive.openBox<MyRecipeModel>("recipe");
 }
 
 class MyApp extends StatefulWidget {

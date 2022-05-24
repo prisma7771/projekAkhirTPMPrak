@@ -12,7 +12,7 @@ class CommonSubmitButton extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          primary: Colors.black,
+          primary: Colors.brown.shade800,
 
         ),
         child: Text(labelButton),

@@ -198,8 +198,6 @@ class _LoginPageState extends State<LoginPage> {
       _showToast("Akun Tidak Ada",
           duration: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
     } else{
-      // String? history = _hive.getHistory(username);
-      // String? images = _hive.getImage(username);
       SharedPreference().setLogin(username, password);
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(

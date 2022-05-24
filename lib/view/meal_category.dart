@@ -25,7 +25,7 @@ class _CategoryListPageState extends State<CategoryListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("CategoryListPage"),
+        title: Text("Meal Category:"),
         actions: [
           IconButton(onPressed: () async {
             String username  = await SharedPreference.getUsername();

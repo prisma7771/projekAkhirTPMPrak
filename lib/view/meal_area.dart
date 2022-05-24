@@ -19,7 +19,7 @@ class _AreaListPageState extends State<AreaListPage> {
     Widget build(BuildContext context) {
       return Scaffold(
         appBar: AppBar(
-          title: Text("CategoryListPage"),
+          title: Text("Meal Area:"),
           actions: [
             IconButton(onPressed: () async {
               String username  = await SharedPreference.getUsername();

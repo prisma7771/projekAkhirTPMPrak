@@ -10,6 +10,7 @@ import 'package:projek_mealdb/view/meal_list_page.dart';
 import 'package:projek_mealdb/view/random_detail_page.dart';
 
 import 'favorit_meal_list_page.dart';
+import 'my_recipe_page.dart';
 
 class HomePage extends StatefulWidget {
   final String username;
@@ -89,7 +90,9 @@ class _HomePageState extends State<HomePage> {
                 SearchBar(),
                 _buildMenu(),
                 _buildItemFavorite(
-                    "MY FAVORITE", Colors.brown.shade400, widget.username),
+                    "MY FAVORITE", Colors.brown.shade400, widget.username, 1),
+                _buildItemFavorite(
+                    "MY RECIPE", Colors.brown.shade200, widget.username, 2),
                 const Center(
                     child: Text(
                   "By Alphabet",
@@ -160,8 +163,7 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                        builder: (context) =>
-                        route == 1
+                        builder: (context) => route == 1
                             ? CategoryListPage()
                             : route == 2
                                 ? IngredientsListPage()
@@ -192,7 +194,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Widget _buildItemFavorite(String title, color, String name) {
+  Widget _buildItemFavorite(String title, color, String name, int i) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(28, 8, 28, 8),
       child: Container(
@@ -208,9 +210,15 @@ class _HomePageState extends State<HomePage> {
           splashColor: Colors.white10,
           highlightColor: Colors.white10,
           onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              return MyFavoritPage(name: name);
-            }));
+            i == 1
+                ? Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
+                    return MyFavoritPage(name: name);
+                  }))
+                : Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
+                    return MyRecipePage(name: name);
+                  }));
           },
           child: Center(
             child: Text(
@@ -228,7 +236,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildAlphabet() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 22.0),
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 22.0),
       child: Container(
         alignment: Alignment.center,
         // height: 200.0,

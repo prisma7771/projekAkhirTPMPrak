@@ -40,73 +40,88 @@ class _RegisterPageState extends State<RegisterPage> {
       appBar: AppBar(
         title: const Text("Register Page"),
       ),
-      body: Container(
-        height: MediaQuery.of(context).size.height-80,
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 24.0),
-              child: Center(child: Text("REGISTRATION FORM", style: TextStyle(fontSize: 34, fontFamily: 'OpenSans'),),),
-            ),
-            Form(
-              key: _formKey,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
+      body: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).size.height-80,
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 6, color: Colors.orange),
+                    borderRadius: BorderRadius.circular(200),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(50.0),
+                    child: CircleAvatar(
+                      radius: 100,
+                      backgroundColor:  const Color(0xFFEFEFEF),
+                      backgroundImage: Image.asset('assets/images/logo1.png',  fit: BoxFit.cover,).image,
+                    ),
+                  )),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
+                child: Center(child: Text("REGISTRATION FORM", style: TextStyle(fontSize: 34, fontFamily: 'OpenSans'),),),
+              ),
+              Form(
+                key: _formKey,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical:16,horizontal: 24.0),
+                  child: TextFormField(
+                    controller: _usernameController,
+                    decoration: const InputDecoration(
+                      fillColor: Colors.white,
+                      labelStyle: TextStyle(color: Colors.black54),
+                      labelText: "USERNAME",
+                      hintText: "USERNAME",
+                      hintStyle: TextStyle(color: Colors.black87),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(width: 3, color: Colors.grey),
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(25.0))
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(width: 3, color: Colors.grey),
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(25.0))
+                      ),
+
+                    ),
+                    validator: (value) => value!.isEmpty ? 'Username cannot be blank':null,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical:16,horizontal: 24.0),
                 child: TextFormField(
-                  controller: _usernameController,
+                  controller: _passwordController,
                   decoration: const InputDecoration(
                     fillColor: Colors.white,
                     labelStyle: TextStyle(color: Colors.black54),
-                    labelText: "USERNAME",
-                    hintText: "USERNAME",
+                    label: Text("PASSWORD"),
+                    hintText: "PASSWORD",
                     hintStyle: TextStyle(color: Colors.black87),
                     enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(width: 3, color: Colors.grey),
                         borderRadius:
-                        BorderRadius.all(Radius.circular(25.0))
-                    ),
+                        BorderRadius.all(Radius.circular(25.0))),
                     focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(width: 3, color: Colors.grey),
                         borderRadius:
                         BorderRadius.all(Radius.circular(25.0))
                     ),
-
                   ),
-                  validator: (value) => value!.isEmpty ? 'Username cannot be blank':null,
+                  obscureText: true,
+                  validator: (value) => value!.isEmpty ? 'Password cannot be blank' : null,
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextFormField(
-                controller: _passwordController,
-                decoration: const InputDecoration(
-                  fillColor: Colors.white,
-                  labelStyle: TextStyle(color: Colors.black54),
-                  label: Text("PASSWORD"),
-                  hintText: "PASSWORD",
-                  hintStyle: TextStyle(color: Colors.black87),
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(width: 3, color: Colors.grey),
-                      borderRadius:
-                      BorderRadius.all(Radius.circular(25.0))),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(width: 3, color: Colors.grey),
-                      borderRadius:
-                      BorderRadius.all(Radius.circular(25.0))
-                  ),
-                ),
-                obscureText: true,
-                validator: (value) => value!.isEmpty ? 'Password cannot be blank' : null,
+              Padding(
+                padding: const EdgeInsets.only(top: 60.0),
+                child: _buildRegisterButton(),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 60.0),
-              child: _buildRegisterButton(),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

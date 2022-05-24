@@ -22,14 +22,14 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
-  late int index = widget.index;
+  late int no = widget.index;
   final HiveDatabaseFav _hiveFav = HiveDatabaseFav();
   bool isFavorite = false;
 
   @override
   void initState() {
     isFavorite = _hiveFav.checkFavorite(
-        widget.username,"${widget.data.meals![index].idMeal}");
+        widget.username,"${widget.data.meals![no].idMeal}");
     debugPrint(widget.username+"dan"+ "$isFavorite");
     super.initState();
   }
@@ -39,7 +39,7 @@ class _DetailPageState extends State<DetailPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            "Detail of ${widget.data.meals?[index].strMeal}".toTitleCase()),
+            "Detail of ${widget.data.meals?[no].strMeal}".toTitleCase()),
         actions: [
           IconButton(
             onPressed: () {
@@ -47,16 +47,16 @@ class _DetailPageState extends State<DetailPage> {
                 _hiveFav.addData(
                   MyFavorite(
                     name: widget.username,
-                    nameMeal: widget.data.meals![index].strMeal,
-                    idMeal: widget.data.meals![index].idMeal,
-                    imageMeal: widget.data.meals![index].strMealThumb,
+                    nameMeal: widget.data.meals![no].strMeal,
+                    idMeal: widget.data.meals![no].idMeal,
+                    imageMeal: widget.data.meals![no].strMealThumb,
                   ),
                 );
                 setState(() {
                   isFavorite = true;
                 });
               } else if (isFavorite == true) {
-                _hiveFav.deleteData(widget.username, "${widget.data.meals![index].idMeal}",);
+                _hiveFav.deleteData(widget.username, "${widget.data.meals![no].idMeal}",);
                 setState(() {
                   isFavorite = false;
                 });
@@ -85,9 +85,10 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Widget _buildDetailMeal() {
+    debugPrint("${widget.data.meals?[no].idMeal}");
     return FutureBuilder(
         future: MealSource.instance
-            .loadDetail(idMeal: "${widget.data.meals?[index].idMeal}"),
+            .loadDetail(idMeal: "${widget.data.meals?[no].idMeal}"),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.hasError) {
             return _buildErrorSection();
@@ -147,28 +148,28 @@ class _DetailPageState extends State<DetailPage> {
             ),
             SizedBox(
               width: MediaQuery.of(context).size.width - 200.0,
-              height: 120.0,
+              height: 140.0,
               child: Padding(
                 padding: EdgeInsets.only(left: 12.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       "${data.meals![0].strMeal}".toUpperCase(),
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontStyle: FontStyle.italic,
-                        fontSize: 15.0,
+                        fontSize: 20.0,
                       ),
                     ),
                     Text(
                       "Meal ID. ${data.meals![0].idMeal}",
-                      style: TextStyle(fontSize: 14.0, fontFamily: 'Koulen'),
+                      style: TextStyle(fontSize: 18.0, fontFamily: 'Koulen'),
                     ),
                     Text(
                       "Meal Category: ${data.meals![0].strCategory}",
-                      style: TextStyle(fontSize: 14.0, fontFamily: 'Koulen'),
+                      style: TextStyle(fontSize: 18.0, fontFamily: 'Koulen'),
                     ),
                   ],
                 ),
@@ -205,7 +206,7 @@ class _DetailPageState extends State<DetailPage> {
               Text(
                 "${data.meals![0].strInstructions}",
                 textAlign: TextAlign.justify,
-                style: TextStyle(fontSize: 16.0),
+                style: TextStyle(fontSize: 20.0),
               ),
             ],
           ),
@@ -216,10 +217,28 @@ class _DetailPageState extends State<DetailPage> {
 
   Widget _buildIngredient(MealDetail data) {
     List<String> value = [
-      "${data.meals![0].strIngredient1}",
-      "${data.meals![0].strIngredient2}",
-      "${data.meals![0].strIngredient3}",
+      "${data.meals![0].strIngredient1}", "${data.meals![0].strIngredient2}",
+      "${data.meals![0].strIngredient3}", "${data.meals![0].strIngredient4}",
+      "${data.meals![0].strIngredient5}", "${data.meals![0].strIngredient6}",
+      "${data.meals![0].strIngredient7}", "${data.meals![0].strIngredient8}",
+      "${data.meals![0].strIngredient9}", "${data.meals![0].strIngredient10}",
+      "${data.meals![0].strIngredient11}", "${data.meals![0].strIngredient12}",
+      "${data.meals![0].strIngredient13}", "${data.meals![0].strIngredient14}",
+      "${data.meals![0].strIngredient15}",
     ];
+    List<String> valueMeasure = [
+      "${data.meals![0].strMeasure1}", "${data.meals![0].strMeasure2}",
+      "${data.meals![0].strMeasure3}", "${data.meals![0].strMeasure4}",
+      "${data.meals![0].strMeasure5}", "${data.meals![0].strMeasure6}",
+      "${data.meals![0].strMeasure7}", "${data.meals![0].strMeasure8}",
+      "${data.meals![0].strMeasure9}", "${data.meals![0].strMeasure10}",
+      "${data.meals![0].strMeasure11}", "${data.meals![0].strMeasure12}",
+      "${data.meals![0].strMeasure13}", "${data.meals![0].strMeasure14}",
+      "${data.meals![0].strMeasure15}",
+    ];
+
+    value.removeWhere((value) => value == "");
+    valueMeasure.removeWhere((value) => value == "");
 
     int i = 0;
     return Padding(
@@ -280,6 +299,11 @@ class _DetailPageState extends State<DetailPage> {
                               ),
                               Text(
                                 value[i].toTitleCase(),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 18),
+                              ),
+                              Text(
+                                valueMeasure[i].toTitleCase(),
                                 textAlign: TextAlign.center,
                                 style: TextStyle(fontSize: 18),
                               ),
