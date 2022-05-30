@@ -118,9 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                             borderRadius:
                             BorderRadius.all(Radius.circular(25.0))
                         ),
-
                     ),
-                    validator: (value) => value!.isEmpty ? 'Username cannot be blank':null,
                   ),
                 ),
                 Padding(
@@ -144,7 +142,6 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     obscureText: true,
-                    validator: (value) => value!.isEmpty ? 'Password cannot be blank' : null,
                   ),
                 ),
                 _buildLoginButton(),
@@ -166,8 +163,13 @@ class _LoginPageState extends State<LoginPage> {
           validateAndSave();
           String currentUsername = _usernameController.value.text;
           String currentPassword = _passwordController.value.text;
-
-          _processLogin(currentUsername, currentPassword);
+          if(currentUsername == "" || currentPassword == ""){
+            _showToast("Field Tidak Boldeh Kosong",
+                duration: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
+          }
+          else {
+            _processLogin(currentUsername, currentPassword);
+          }
         },
       ),
     );

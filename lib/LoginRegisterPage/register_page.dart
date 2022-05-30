@@ -88,7 +88,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
 
                     ),
-                    validator: (value) => value!.isEmpty ? 'Username cannot be blank':null,
                   ),
                 ),
               ),
@@ -113,7 +112,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   obscureText: true,
-                  validator: (value) => value!.isEmpty ? 'Password cannot be blank' : null,
                 ),
               ),
               Padding(
@@ -131,6 +129,11 @@ class _RegisterPageState extends State<RegisterPage> {
     return CommonSubmitButton(
       labelButton: "REGISTER",
       submitCallback: (value) {
+        if(_usernameController.text == "" || _passwordController.text == ""){
+          _showToast("Field Tidak Boldeh Kosong",
+              duration: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
+          return;
+        }
         isExist = _hive.checkUsers(_usernameController.text);
         if (isExist == false && _usernameController.text.isNotEmpty && _passwordController.text.isNotEmpty) {
           _hive.addData(
