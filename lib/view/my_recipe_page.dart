@@ -9,6 +9,7 @@ import 'package:projek_mealdb/helper/shared_preference.dart';
 import 'package:projek_mealdb/view/create_recipe_page.dart';
 import 'package:projek_mealdb/view/meal_category.dart';
 import 'package:projek_mealdb/view/recipe_detail_page.dart';
+import 'edit_recipe_page.dart';
 import 'favorite_detail_page.dart';
 import 'home_page.dart';
 
@@ -28,7 +29,7 @@ class _MyRecipePageState extends State<MyRecipePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("My Favorite Meals"),
+        title: Text("My Recipe"),
         actions: [
           IconButton(
             onPressed: () async {
@@ -52,7 +53,6 @@ class _MyRecipePageState extends State<MyRecipePage> {
   }
 
   Widget _buildList() {
-    int check = _hiveRec.getLength(widget.name);
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -83,17 +83,31 @@ class _MyRecipePageState extends State<MyRecipePage> {
               ),
             ),
           ),
+          Row(children: <Widget>[
+            Expanded(
+              child: new Container(
+                  margin: const EdgeInsets.only(left: 10.0, right: 20.0),
+                  child: Divider(
+                    color: Colors.black,
+                    height: 36,
+                  )),
+            ),
+            Text("MY RECIPE"),
+            Expanded(
+              child: new Container(
+                  margin: const EdgeInsets.only(left: 20.0, right: 10.0),
+                  child: Divider(
+                    color: Colors.black,
+                    height: 36,
+                  )),
+            ),
+          ]),
           Container(
-            height: 600,
+            height: MediaQuery.of(context).size.height-220,
             child: ValueListenableBuilder(
               valueListenable: _hiveRec.listenable(),
               builder:
                   (BuildContext context, Box<dynamic> value, Widget? child) {
-                if (value.isEmpty || check == 0) {
-                  return const Center(
-                    child: Text("Data Kosong"),
-                  );
-                }
                 debugPrint(widget.name);
                 return _buildSuccessSection(_hiveRec);
               },
@@ -105,11 +119,11 @@ class _MyRecipePageState extends State<MyRecipePage> {
   }
 
   Widget _buildSuccessSection(HiveDatabaseRecipe _hiveRec) {
-    // debugPrint("${_hiveRec.getLength(widget.name)}");
+    int jml = _hiveRec.getLength(widget.name);
     return Container(
       height: MediaQuery.of(context).size.height,
-      child: ListView.builder(
-          itemCount: _hiveRec.getLength(widget.name),
+      child: jml == 0 ? Center(child: Text("Data Kosong")) : ListView.builder(
+          itemCount: jml,
           itemBuilder: (BuildContext context, int index) {
             List filteredUsers = _hiveRec
                 .values()
@@ -187,7 +201,7 @@ class _MyRecipePageState extends State<MyRecipePage> {
           )),
            Center(
             child: Container(
-              width: 100,
+              width: 50,
               child: InkWell(
                 onTap: (){
                   _hiveRec.deleteData(name, "${filteredUsers[index].nameMeal}");
@@ -195,7 +209,25 @@ class _MyRecipePageState extends State<MyRecipePage> {
                 child: Icon(
                   Icons.delete,
                   color: Colors.black,
-                  size: 50.0,
+                  size: 30.0,
+                ),
+              ),
+            ),
+          ),
+          Center(
+            child: Container(
+              width: 50,
+              child: InkWell(
+                onTap: (){
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return EditRecipe(username: name, index: index, list: filteredUsers);
+                  }));
+                },
+                child: Icon(
+                  Icons.edit,
+                  color: Colors.black,
+                  size: 30.0,
                 ),
               ),
             ),

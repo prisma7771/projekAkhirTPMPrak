@@ -6,8 +6,9 @@ import 'package:projek_mealdb/helper/shared_preference.dart';
 import 'image_picker_helper.dart';
 
 class ImagePickerSection extends StatefulWidget {
+  final String img;
   const ImagePickerSection(
-      {Key? key}) : super(key: key);
+      {Key? key, required this.img}) : super(key: key);
 
   @override
   _ImagePickerSectionState createState() => _ImagePickerSectionState();
@@ -15,6 +16,13 @@ class ImagePickerSection extends StatefulWidget {
 
 class _ImagePickerSectionState extends State<ImagePickerSection> {
   String imagePath = "";
+
+  @override
+  void initState() {
+    super.initState();
+    imagePath = widget.img;
+    SharedPreference().setImage(imagePath);
+  }
 
   @override
   Widget build(BuildContext context) {

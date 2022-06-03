@@ -248,7 +248,9 @@ class _FavoriteDetailPageState extends State<FavoriteDetailPage> {
       "${data.meals![0].strMeasure15}",
     ];
     value.removeWhere((value) => value == "");
+    value.removeWhere((value) => value == "null");
     valueMeasure.removeWhere((value) => value == "");
+    valueMeasure.removeWhere((value) => value == "null");
 
     int i = 0;
     return Padding(
@@ -279,7 +281,7 @@ class _FavoriteDetailPageState extends State<FavoriteDetailPage> {
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
-                  childAspectRatio: 0.72,
+                  childAspectRatio: 0.6,
                 ),
                 itemBuilder: (context, i) {
                   return Card(

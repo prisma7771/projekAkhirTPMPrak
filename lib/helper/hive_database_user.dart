@@ -9,6 +9,7 @@ class HiveDatabase{
     _localDB.add(data);
   }
 
+
   int getLength() {
     return _localDB.length;
   }
@@ -17,14 +18,12 @@ class HiveDatabase{
     bool found = false;
     for(int i = 0; i< getLength(); i++){
       if (username == _localDB.getAt(i)!.username && password == _localDB.getAt(i)!.password) {
-        ("Login Success");
         found = true;
         break;
       } else {
         found = false;
       }
     }
-
     return found;
   }
 

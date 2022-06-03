@@ -135,6 +135,8 @@ class _MyRecipeDetailPageState extends State<MyRecipeDetailPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 9),
       child: Container(
+        width: MediaQuery.of(context).size.width,
+        padding: EdgeInsets.symmetric(horizontal: 8),
         decoration: BoxDecoration(
           border: Border.all(width: 5.0, color: Colors.brown.shade700),
           borderRadius: BorderRadius.circular(20),
@@ -173,8 +175,6 @@ class _MyRecipeDetailPageState extends State<MyRecipeDetailPage> {
       "${widget.list[index].ingMeal3}",
       "${widget.list[index].ingMeal2}"
     ];
-    debugPrint("${widget.list[index].ingMeal1}");
-
     int i = 0;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
@@ -204,7 +204,7 @@ class _MyRecipeDetailPageState extends State<MyRecipeDetailPage> {
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
-                  childAspectRatio: 0.72,
+                  childAspectRatio: 0.65,
                 ),
                 itemBuilder: (context, i) {
                   return Card(
@@ -254,6 +254,4 @@ class _MyRecipeDetailPageState extends State<MyRecipeDetailPage> {
     );
   }
 }
-//
-// var data =
-// (await GithubDataSource.instance.loadUsersData(_search));
+

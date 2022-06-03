@@ -21,10 +21,32 @@ class HiveDatabaseRecipe {
     }
   }
 
+  void updateData(String? name, String? nameMeal, MyRecipeModel data){
+    for (int i = 0; i < getLengthAll(); i++) {
+      if (name == _localDB.getAt(i)!.name && nameMeal == _localDB.getAt(i)!.nameMeal) {
+        _localDB.putAt(i, data);
+      }
+    }
+  }
+
   void showAll(){
     for (int i = 0; i < getLengthAll(); i++) {
       debugPrint("${_localDB.getAt(i)!.name}");
     }
+  }
+
+  bool checkData(String? name, String? nameMeal){
+    bool check = false;
+    for (int i = 0; i < getLengthAll(); i++) {
+      if (name == _localDB.getAt(i)!.name && nameMeal!.toLowerCase() == _localDB.getAt(i)!.nameMeal!.toLowerCase()) {
+        check = true;
+        break;
+      }
+      else{
+        check = false;
+      }
+    }
+    return check;
   }
 
   int getLength(String? username) {

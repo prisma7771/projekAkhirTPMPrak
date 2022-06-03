@@ -10,16 +10,17 @@ import 'package:projek_mealdb/model/ingredient_list_model.dart';
 import 'package:projek_mealdb/model/meal_category_list_model.dart';
 import 'package:projek_mealdb/source/meal_source.dart';
 
-class CreateRecipe extends StatefulWidget {
+class EditRecipe extends StatefulWidget {
   final String username;
-
-  const CreateRecipe({Key? key, required this.username}) : super(key: key);
+  final List<dynamic> list;
+  final int index;
+  const EditRecipe({Key? key, required this.username, required this.list, required this.index}) : super(key: key);
 
   @override
-  _CreateRecipeState createState() => _CreateRecipeState();
+  _EditRecipeState createState() => _EditRecipeState();
 }
 
-class _CreateRecipeState extends State<CreateRecipe> {
+class _EditRecipeState extends State<EditRecipe> {
   final HiveDatabaseRecipe _hiveRec = HiveDatabaseRecipe();
   final TextEditingController _searchController1 = TextEditingController();
   final TextEditingController _searchController2 = TextEditingController();
@@ -27,12 +28,26 @@ class _CreateRecipeState extends State<CreateRecipe> {
   List<String> ingredients = [];
   String _recipename = "";
   String _insMeal = "";
+  String img = "";
+  bool changed = false;
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      _searchController1.text = widget.list[widget.index].ingMeal1;
+      _searchController2.text = widget.list[widget.index].ingMeal2;
+      _searchController3.text = widget.list[widget.index].ingMeal3;
+      _recipename = widget.list[widget.index].nameMeal;
+      _insMeal = widget.list[widget.index].insMeal;
+      img = widget.list[widget.index].imageMeal;
+    });
+    }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Create Recipe"),
+        title: Text("Edit Recipe"),
       ),
       body: _buildFormRecipe(),
     );
@@ -47,7 +62,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
           }
           if (snapshot.hasData) {
             IngredientList ingredientList =
-                IngredientList.fromJson(snapshot.data);
+            IngredientList.fromJson(snapshot.data);
             return _buildSuccessSection(ingredientList);
           }
           return _buildLoadingSection();
@@ -74,14 +89,6 @@ class _CreateRecipeState extends State<CreateRecipe> {
       child: Center(
         child: Column(
           children: [
-            Text(
-              "Hello, ${widget.username}!!!\nCreate your Recipe!!!",
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 20),
-            ),
-            SizedBox(
-              height: 24,
-            ),
             Container(
               decoration: BoxDecoration(
                   border: Border.all(width: 3, color: Colors.brown.shade100),
@@ -90,7 +97,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
               height: MediaQuery.of(context).size.height - 400,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ImagePickerSection(img: '',),
+                child: ImagePickerSection(img: img),
               ),
             ),
             SizedBox(
@@ -112,14 +119,16 @@ class _CreateRecipeState extends State<CreateRecipe> {
 
   Widget _formInput(
       {required String hint,
-      required String label,
-      required Function(String value) setStateInput,
-      int maxLines = 1,
-      int charSize = 0}) {
+        required String label,
+        required initialValue,
+        required Function(String value) setStateInput,
+        int maxLines = 1,
+        int charSize = 0}) {
     return TextFormField(
       inputFormatters: [
         LengthLimitingTextInputFormatter(charSize),
       ],
+      initialValue: initialValue,
       enabled: true,
       maxLines: maxLines,
       decoration: InputDecoration(
@@ -146,12 +155,19 @@ class _CreateRecipeState extends State<CreateRecipe> {
         _formInput(
             hint: "Enter Recipe Name",
             label: "Recipe Name",
+            initialValue: _recipename,
             setStateInput: (value) {
               setState(() {
                 _recipename = value;
+                if (_recipename == widget.list[widget.index].nameMeal){
+                  changed = false;
+                }
+                else{
+                  changed = true;
+                }
               });
             },
-        charSize: 50),
+            charSize: 50,),
         const SizedBox(
           height: 12,
         ),
@@ -170,13 +186,14 @@ class _CreateRecipeState extends State<CreateRecipe> {
         _formInput(
             hint: "Instruction",
             label: "Type Instruction... ",
+            initialValue: _insMeal,
             setStateInput: (value) {
               setState(() {
                 _insMeal = value;
               });
             },
             maxLines: 10,
-        charSize: 200),
+            charSize: 200),
       ],
     );
   }
@@ -199,8 +216,8 @@ class _CreateRecipeState extends State<CreateRecipe> {
           controller: ing == 1
               ? _searchController1
               : ing == 2
-                  ? _searchController2
-                  : _searchController3,
+              ? _searchController2
+              : _searchController3,
           decoration: const InputDecoration(
               fillColor: Colors.white,
               labelStyle: TextStyle(color: Colors.brown),
@@ -216,8 +233,8 @@ class _CreateRecipeState extends State<CreateRecipe> {
         ing == 1
             ? _searchController1.text = suggestion
             : ing == 2
-                ? _searchController2.text = suggestion
-                : _searchController3.text = suggestion;
+            ? _searchController2.text = suggestion
+            : _searchController3.text = suggestion;
       },
       itemBuilder: (context, String suggestion) {
         return ListTile(
@@ -229,6 +246,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
 
   Widget _buildButtonSubmit() {
     return Container(
+      padding: EdgeInsets.all(8),
       child: ElevatedButton(
         onPressed: () async {
           bool check = _hiveRec.checkData(widget.username, _recipename);
@@ -236,27 +254,27 @@ class _CreateRecipeState extends State<CreateRecipe> {
             _showToast("Please fill all field",
                 duration: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
           }
-          else if (check == true){
+          else if (check == true && changed == true){
             _showToast("Meal Recipe is already exist",
                 duration: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
           }
           else{
-          String img = await SharedPreference.getImage();
-          _hiveRec.addData(MyRecipeModel(
-              name: widget.username,
-              nameMeal: _recipename,
-              imageMeal: img,
-              ingMeal1: _searchController1.text,
-              ingMeal2: _searchController2.text,
-              ingMeal3: _searchController3.text,
-              insMeal: _insMeal));
-          Navigator.pop(context);
+            String img = await SharedPreference.getImage();
+            _hiveRec.updateData(widget.username,widget.list[widget.index].nameMeal, MyRecipeModel(
+                name: widget.username,
+                nameMeal: _recipename,
+                imageMeal: img,
+                ingMeal1: _searchController1.text,
+                ingMeal2: _searchController2.text,
+                ingMeal3: _searchController3.text,
+                insMeal: _insMeal));
+            Navigator.pop(context);
 
-          _searchController1.clear();
-          _searchController2.clear();
-          _searchController3.clear();
-        }},
-        child: Text("Add"),
+            _searchController1.clear();
+            _searchController2.clear();
+            _searchController3.clear();
+          }},
+        child: Text("Edit"),
         style: ElevatedButton.styleFrom(
             padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
             textStyle: TextStyle(fontSize: 16)),
