@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
 
 class BaseNetwork {
   static const String baseUrl = "https://www.themealdb.com/api/json/v1/1";

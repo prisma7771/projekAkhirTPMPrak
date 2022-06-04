@@ -8,11 +8,11 @@ import 'package:projek_mealdb/view/meal_category.dart';
 import 'detail_page.dart';
 import 'home_page.dart';
 
-
 class MealListPage extends StatefulWidget {
   final String value;
   final int index;
-  const MealListPage({Key? key, required this.value, required this.index}) : super(key: key);
+  const MealListPage({Key? key, required this.value, required this.index})
+      : super(key: key);
 
   @override
   State<MealListPage> createState() => _MealListPageState();
@@ -24,19 +24,29 @@ class _MealListPageState extends State<MealListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("List By:  ${widget.value}"),
+        title: Text(
+          "List By:  ${widget.value}",
+          style: TextStyle(
+              fontFamily: 'Caveat',
+              fontWeight: FontWeight.bold,
+              fontSize: 24.0),
+        ),
         actions: [
-          IconButton(onPressed: () async {
-            String username  = await SharedPreference.getUsername();
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => HomePage(
-                    username: username,
-                  )),
-                  (_) => false,
-            );
-          }, icon: const Icon(Icons.home), iconSize: 30,)
+          IconButton(
+            onPressed: () async {
+              String username = await SharedPreference.getUsername();
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => HomePage(
+                          username: username,
+                        )),
+                (_) => false,
+              );
+            },
+            icon: const Icon(Icons.home),
+            iconSize: 30,
+          )
         ],
       ),
       body: _buildListMeal(),
@@ -45,19 +55,24 @@ class _MealListPageState extends State<MealListPage> {
 
   Widget _buildListMeal() {
     return FutureBuilder(
-        future:
-        index == 1 ? MealSource.instance.loadByCategory(category: widget.value) :
-        index == 2 ? MealSource.instance.loadByIngredient(ingredient: widget.value.toUnderScore()) :
-        index == 3 ? MealSource.instance.loadByAlphabet(alphabet: widget.value.toLowerCase()) :
-        index == 4 ? MealSource.instance.loadByArea(area: widget.value) :
-        MealSource.instance.loadBySearch(search: widget.value.toLowerCase()),
+        future: index == 1
+            ? MealSource.instance.loadByCategory(category: widget.value)
+            : index == 2
+                ? MealSource.instance
+                    .loadByIngredient(ingredient: widget.value.toUnderScore())
+                : index == 3
+                    ? MealSource.instance
+                        .loadByAlphabet(alphabet: widget.value.toLowerCase())
+                    : index == 4
+                        ? MealSource.instance.loadByArea(area: widget.value)
+                        : MealSource.instance
+                            .loadBySearch(search: widget.value.toLowerCase()),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.hasError) {
             return _buildErrorSection();
           }
           if (snapshot.hasData) {
-            MealList mealList =
-            MealList.fromJson(snapshot.data);
+            MealList mealList = MealList.fromJson(snapshot.data);
             return _buildSuccessSection(mealList);
           }
           return _buildLoadingSection();
@@ -72,7 +87,8 @@ class _MealListPageState extends State<MealListPage> {
 
   Widget _buildErrorSection() {
     return Center(
-        child: Text("No Internet Connection", textAlign: TextAlign.center, style: TextStyle(fontSize: 30.0)));
+        child: Text("No Internet Connection",
+            textAlign: TextAlign.center, style: TextStyle(fontSize: 30.0)));
   }
 
   Widget _buildSuccessSection(MealList data) {
@@ -82,38 +98,44 @@ class _MealListPageState extends State<MealListPage> {
         children: [
           SearchBar(),
           Expanded(
-            child: data.meals != null ? ListView.builder(
-                itemCount: data.meals?.length,
-                itemBuilder: (BuildContext context, int index){
+            child: data.meals != null
+                ? ListView.builder(
+                    itemCount: data.meals?.length,
+                    itemBuilder: (BuildContext context, int index) {
                       return Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          clipBehavior: Clip.antiAlias,
-                          child: Container(
-                              decoration:
-                              BoxDecoration(
-                                  border: Border.all(color: Colors.brown.shade800, width: 3.0,),
-                                  borderRadius: BorderRadius.circular(15),
-                                color: Colors.brown.withOpacity(0.7),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        clipBehavior: Clip.antiAlias,
+                        child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.brown.shade800,
+                                width: 3.0,
                               ),
-                              child: InkWell(
-                                  onTap: () async {
-                                    String username = await SharedPreference.getUsername();
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(builder: (context) {
-                                          return DetailPage(username: username, data: data, index: index);
-                                        })
-                                    );
-                                  },
-                                  child: _buildItemList(
-                                    data, index
-                                  ))),
-                        );
+                              borderRadius: BorderRadius.circular(15),
+                              color: Colors.brown.withOpacity(0.7),
+                            ),
+                            child: InkWell(
+                                onTap: () async {
+                                  String username =
+                                      await SharedPreference.getUsername();
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context) {
+                                    return DetailPage(
+                                        username: username,
+                                        data: data,
+                                        index: index);
+                                  }));
+                                },
+                                child: _buildItemList(data, index))),
+                      );
                     })
                 : Center(
-                  child: Center(
-                      child: Text("Resep Tidak Ada", textAlign: TextAlign.center, style: TextStyle(fontSize: 30.0)))),
+                    child: Center(
+                        child: Text("Resep Tidak Ada",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 30.0)))),
           ),
         ],
       ),
@@ -133,22 +155,24 @@ class _MealListPageState extends State<MealListPage> {
                 borderRadius: BorderRadius.circular(25),
                 color: Colors.brown.shade800,
               ),
-            child: Padding(
-              padding: const EdgeInsets.all(6.0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(25),
+              child: Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(25),
                   child: Image.network(
                     imageUrl,
                     width: 130.0,
                     fit: BoxFit.contain,
                   ),
                 ),
-            ),
+              ),
             ),
           ),
-          Expanded(child: Padding(
+          Expanded(
+              child: Padding(
             padding: const EdgeInsets.all(14.0),
-            child: Text("${data.meals![index].strMeal}".toTitleCase(), style: const TextStyle(fontSize: 28.0)),
+            child: Text("${data.meals![index].strMeal}".toTitleCase(),
+                style: const TextStyle(fontSize: 28.0)),
           )),
           // Expanded(child: Text(value2.toTitleCase(), style: const TextStyle(fontSize: 26.0))),
         ],

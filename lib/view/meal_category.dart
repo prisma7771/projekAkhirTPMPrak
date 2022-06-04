@@ -15,8 +15,12 @@ class CategoryListPage extends StatefulWidget {
 }
 
 extension StringCasingExtension on String {
-  String toCapitalized() => length > 0 ?'${this[0].toUpperCase()}${substring(1).toLowerCase()}':'';
-  String toTitleCase() => replaceAll(RegExp(' +'), ' ').split(' ').map((str) => str.toCapitalized()).join(' ');
+  String toCapitalized() =>
+      length > 0 ? '${this[0].toUpperCase()}${substring(1).toLowerCase()}' : '';
+  String toTitleCase() => replaceAll(RegExp(' +'), ' ')
+      .split(' ')
+      .map((str) => str.toCapitalized())
+      .join(' ');
   String toUnderScore() => replaceAll(" ", "_").toLowerCase();
 }
 
@@ -25,27 +29,36 @@ class _CategoryListPageState extends State<CategoryListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Meal Category:"),
+        title: Text(
+          "Category List:",
+          style: TextStyle(
+              fontFamily: 'Caveat',
+              fontWeight: FontWeight.bold,
+              fontSize: 24.0),
+        ),
         actions: [
-          IconButton(onPressed: () async {
-            String username  = await SharedPreference.getUsername();
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => HomePage(
-                    username: username,
-                  )),
-                  (_) => false,
-            );
-          }, icon: const Icon(Icons.home), iconSize: 30,)
+          IconButton(
+            onPressed: () async {
+              String username = await SharedPreference.getUsername();
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => HomePage(
+                          username: username,
+                        )),
+                (_) => false,
+              );
+            },
+            icon: const Icon(Icons.home),
+            iconSize: 30,
+          )
         ],
       ),
       body: _buildListCategory(),
-
     );
   }
 
-  Widget _buildListCategory(){
+  Widget _buildListCategory() {
     return FutureBuilder(
         future: MealSource.instance.loadCategories(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -54,7 +67,7 @@ class _CategoryListPageState extends State<CategoryListPage> {
           }
           if (snapshot.hasData) {
             MealCategoryList categoryList =
-            MealCategoryList.fromJson(snapshot.data);
+                MealCategoryList.fromJson(snapshot.data);
             return _buildSuccessSection(categoryList);
           }
           return _buildLoadingSection();
@@ -77,28 +90,30 @@ class _CategoryListPageState extends State<CategoryListPage> {
       itemCount: data.categories?.length,
       itemBuilder: (BuildContext context, int index) {
         return Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          clipBehavior: Clip.antiAlias,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            clipBehavior: Clip.antiAlias,
             child: Container(
-              decoration:
-              BoxDecoration(
-                border: Border.all(color: Colors.brown.shade800, width: 3.0,),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.brown.shade800,
+                  width: 3.0,
+                ),
                 borderRadius: BorderRadius.circular(15),
                 color: Colors.brown.withOpacity(0.7),
               ),
               child: InkWell(
                   borderRadius: BorderRadius.all(Radius.circular(25)),
                   onTap: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) {
-                          return MealListPage(value: "${data.categories?[index].strCategory}", index: 1);
-                        })
-                    );
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) {
+                      return MealListPage(
+                          value: "${data.categories?[index].strCategory}",
+                          index: 1);
+                    }));
                   },
-                  child: _buildMealCategory(data, index
-                  )),
+                  child: _buildMealCategory(data, index)),
             ));
       },
     );
@@ -130,9 +145,11 @@ class _CategoryListPageState extends State<CategoryListPage> {
               ),
             ),
           ),
-          Expanded(child: Padding(
+          Expanded(
+              child: Padding(
             padding: const EdgeInsets.all(14.0),
-            child: Text("${data.categories![index].strCategory}".toTitleCase(), style: const TextStyle(fontSize: 28.0)),
+            child: Text("${data.categories![index].strCategory}".toTitleCase(),
+                style: const TextStyle(fontSize: 28.0)),
           )),
           // Expanded(child: Text(value2.toTitleCase(), style: const TextStyle(fontSize: 26.0))),
         ],
@@ -141,4 +158,3 @@ class _CategoryListPageState extends State<CategoryListPage> {
     return text;
   }
 }
-

@@ -4,8 +4,6 @@ import 'package:projek_mealdb/helper/shared_preference.dart';
 import 'package:projek_mealdb/model/meal_detail_model.dart';
 import 'package:projek_mealdb/source/meal_source.dart';
 import 'package:projek_mealdb/view/meal_category.dart';
-
-import '../main.dart';
 import 'home_page.dart';
 import 'meal_list_page.dart';
 
@@ -25,7 +23,13 @@ class _RandomDetailPageState extends State<RandomDetailPage> {
     debugPrint("${_hiveFav.getLengthAll()}");
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Our Lucky Recipe!!!"),
+        title: const Text(
+          "Our Lucky Recipe!!!",
+          style: TextStyle(
+              fontFamily: 'Caveat',
+              fontWeight: FontWeight.bold,
+              fontSize: 24.0),
+        ),
         actions: [
           IconButton(
             onPressed: () async {
@@ -217,7 +221,6 @@ class _RandomDetailPageState extends State<RandomDetailPage> {
     valueMeasure.removeWhere((value) => value == "");
     valueMeasure.removeWhere((value) => value == "null");
 
-    int i = 0;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
       child: Container(

@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:projek_mealdb/transit/change_page.dart';
-import 'package:projek_mealdb/transit/change_page_login.dart';
+import 'package:projek_mealdb/view/home_page.dart';
+import 'LoginRegisterPage/login_page.dart';
 import 'helper/shared_preference.dart';
 import 'hive_model/myfavorite_model.dart';
 
@@ -24,7 +24,7 @@ void main() async {
           ? MyApp(
         username: username,
       )
-          : const ChangePageLogin()),
+          : const LoginPage()),
   );
 }
 
@@ -71,6 +71,6 @@ class _MyAppState extends State<MyApp> {
         ? Container(
         color: Colors.white,
         child: const Center(child: CircularProgressIndicator()))
-        : ChangePageHome(user: widget.username,);
+        : HomePage(username: widget.username,);
   }
 }

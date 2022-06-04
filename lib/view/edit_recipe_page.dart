@@ -7,14 +7,18 @@ import 'package:projek_mealdb/helper/shared_preference.dart';
 import 'package:projek_mealdb/hive_model/myfavorite_model.dart';
 import 'package:projek_mealdb/image_picker/image_picker_section.dart';
 import 'package:projek_mealdb/model/ingredient_list_model.dart';
-import 'package:projek_mealdb/model/meal_category_list_model.dart';
 import 'package:projek_mealdb/source/meal_source.dart';
 
 class EditRecipe extends StatefulWidget {
   final String username;
   final List<dynamic> list;
   final int index;
-  const EditRecipe({Key? key, required this.username, required this.list, required this.index}) : super(key: key);
+  const EditRecipe(
+      {Key? key,
+      required this.username,
+      required this.list,
+      required this.index})
+      : super(key: key);
 
   @override
   _EditRecipeState createState() => _EditRecipeState();
@@ -41,13 +45,19 @@ class _EditRecipeState extends State<EditRecipe> {
       _insMeal = widget.list[widget.index].insMeal;
       img = widget.list[widget.index].imageMeal;
     });
-    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit Recipe"),
+        title: Text(
+          "Edit Recipe",
+          style: TextStyle(
+              fontFamily: 'Caveat',
+              fontWeight: FontWeight.bold,
+              fontSize: 24.0),
+        ),
       ),
       body: _buildFormRecipe(),
     );
@@ -62,7 +72,7 @@ class _EditRecipeState extends State<EditRecipe> {
           }
           if (snapshot.hasData) {
             IngredientList ingredientList =
-            IngredientList.fromJson(snapshot.data);
+                IngredientList.fromJson(snapshot.data);
             return _buildSuccessSection(ingredientList);
           }
           return _buildLoadingSection();
@@ -119,11 +129,11 @@ class _EditRecipeState extends State<EditRecipe> {
 
   Widget _formInput(
       {required String hint,
-        required String label,
-        required initialValue,
-        required Function(String value) setStateInput,
-        int maxLines = 1,
-        int charSize = 0}) {
+      required String label,
+      required initialValue,
+      required Function(String value) setStateInput,
+      int maxLines = 1,
+      int charSize = 0}) {
     return TextFormField(
       inputFormatters: [
         LengthLimitingTextInputFormatter(charSize),
@@ -153,21 +163,21 @@ class _EditRecipeState extends State<EditRecipe> {
           height: 12,
         ),
         _formInput(
-            hint: "Enter Recipe Name",
-            label: "Recipe Name",
-            initialValue: _recipename,
-            setStateInput: (value) {
-              setState(() {
-                _recipename = value;
-                if (_recipename == widget.list[widget.index].nameMeal){
-                  changed = false;
-                }
-                else{
-                  changed = true;
-                }
-              });
-            },
-            charSize: 50,),
+          hint: "Enter Recipe Name",
+          label: "Recipe Name",
+          initialValue: _recipename,
+          setStateInput: (value) {
+            setState(() {
+              _recipename = value;
+              if (_recipename == widget.list[widget.index].nameMeal) {
+                changed = false;
+              } else {
+                changed = true;
+              }
+            });
+          },
+          charSize: 50,
+        ),
         const SizedBox(
           height: 12,
         ),
@@ -216,8 +226,8 @@ class _EditRecipeState extends State<EditRecipe> {
           controller: ing == 1
               ? _searchController1
               : ing == 2
-              ? _searchController2
-              : _searchController3,
+                  ? _searchController2
+                  : _searchController3,
           decoration: const InputDecoration(
               fillColor: Colors.white,
               labelStyle: TextStyle(color: Colors.brown),
@@ -233,8 +243,8 @@ class _EditRecipeState extends State<EditRecipe> {
         ing == 1
             ? _searchController1.text = suggestion
             : ing == 2
-            ? _searchController2.text = suggestion
-            : _searchController3.text = suggestion;
+                ? _searchController2.text = suggestion
+                : _searchController3.text = suggestion;
       },
       itemBuilder: (context, String suggestion) {
         return ListTile(
@@ -250,30 +260,36 @@ class _EditRecipeState extends State<EditRecipe> {
       child: ElevatedButton(
         onPressed: () async {
           bool check = _hiveRec.checkData(widget.username, _recipename);
-          if(_recipename.isEmpty || _searchController1.text.isEmpty || _searchController2.text.isEmpty || _searchController3.text.isEmpty || _insMeal.isEmpty){
+          if (_recipename.isEmpty ||
+              _searchController1.text.isEmpty ||
+              _searchController2.text.isEmpty ||
+              _searchController3.text.isEmpty ||
+              _insMeal.isEmpty) {
             _showToast("Please fill all field",
                 duration: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
-          }
-          else if (check == true && changed == true){
+          } else if (check == true && changed == true) {
             _showToast("Meal Recipe is already exist",
                 duration: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
-          }
-          else{
+          } else {
             String img = await SharedPreference.getImage();
-            _hiveRec.updateData(widget.username,widget.list[widget.index].nameMeal, MyRecipeModel(
-                name: widget.username,
-                nameMeal: _recipename,
-                imageMeal: img,
-                ingMeal1: _searchController1.text,
-                ingMeal2: _searchController2.text,
-                ingMeal3: _searchController3.text,
-                insMeal: _insMeal));
+            _hiveRec.updateData(
+                widget.username,
+                widget.list[widget.index].nameMeal,
+                MyRecipeModel(
+                    name: widget.username,
+                    nameMeal: _recipename,
+                    imageMeal: img,
+                    ingMeal1: _searchController1.text,
+                    ingMeal2: _searchController2.text,
+                    ingMeal3: _searchController3.text,
+                    insMeal: _insMeal));
             Navigator.pop(context);
 
             _searchController1.clear();
             _searchController2.clear();
             _searchController3.clear();
-          }},
+          }
+        },
         child: Text("Edit"),
         style: ElevatedButton.styleFrom(
             padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
@@ -282,7 +298,7 @@ class _EditRecipeState extends State<EditRecipe> {
     );
   }
 
-  void _showToast(String msg, {Toast? duration, ToastGravity? gravity}){
+  void _showToast(String msg, {Toast? duration, ToastGravity? gravity}) {
     Fluttertoast.showToast(msg: msg, toastLength: duration, gravity: gravity);
   }
 }

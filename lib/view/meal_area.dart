@@ -16,30 +16,39 @@ class AreaListPage extends StatefulWidget {
 
 class _AreaListPageState extends State<AreaListPage> {
   @override
-    Widget build(BuildContext context) {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text("Meal Area:"),
-          actions: [
-            IconButton(onPressed: () async {
-              String username  = await SharedPreference.getUsername();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Area List",
+          style: TextStyle(
+              fontFamily: 'Caveat',
+              fontWeight: FontWeight.bold,
+              fontSize: 24.0),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              String username = await SharedPreference.getUsername();
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
                     builder: (context) => HomePage(
-                      username: username,
-                    )),
-                    (_) => false,
+                          username: username,
+                        )),
+                (_) => false,
               );
-            }, icon: const Icon(Icons.home), iconSize: 30,)
-          ],
-        ),
-        body: _buildListArea(),
-
-      );
+            },
+            icon: const Icon(Icons.home),
+            iconSize: 30,
+          )
+        ],
+      ),
+      body: _buildListArea(),
+    );
   }
 
-  Widget _buildListArea(){
+  Widget _buildListArea() {
     return FutureBuilder(
         future: MealSource.instance.loadArea(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -47,8 +56,7 @@ class _AreaListPageState extends State<AreaListPage> {
             return _buildErrorSection();
           }
           if (snapshot.hasData) {
-            AreaList areaList =
-            AreaList.fromJson(snapshot.data);
+            AreaList areaList = AreaList.fromJson(snapshot.data);
             return _buildSuccessSection(areaList);
           }
           return _buildLoadingSection();
@@ -76,23 +84,24 @@ class _AreaListPageState extends State<AreaListPage> {
             ),
             clipBehavior: Clip.antiAlias,
             child: Container(
-              decoration:
-              BoxDecoration(
-                border: Border.all(color: Colors.brown.shade800, width: 3.0,),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.brown.shade800,
+                  width: 3.0,
+                ),
                 borderRadius: BorderRadius.circular(15),
                 color: Colors.brown.withOpacity(0.7),
               ),
               child: InkWell(
                   borderRadius: BorderRadius.all(Radius.circular(25)),
                   onTap: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) {
-                          return MealListPage(value: "${data.meals?[index].strArea}", index: 4);
-                        })
-                    );
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) {
+                      return MealListPage(
+                          value: "${data.meals?[index].strArea}", index: 4);
+                    }));
                   },
-                  child: _buildMealCategory(data, index
-                  )),
+                  child: _buildMealCategory(data, index)),
             ));
       },
     );
@@ -104,11 +113,14 @@ class _AreaListPageState extends State<AreaListPage> {
       child: Center(
         child: Padding(
           padding: const EdgeInsets.all(14.0),
-          child: Text("${data.meals?[index].strArea}", style: const TextStyle(fontSize: 28.0), textAlign: TextAlign.center,),
+          child: Text(
+            "${data.meals?[index].strArea}",
+            style: const TextStyle(fontSize: 28.0),
+            textAlign: TextAlign.center,
+          ),
         ),
       ),
     );
     return text;
   }
-
 }

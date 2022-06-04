@@ -7,7 +7,6 @@ import 'package:projek_mealdb/helper/shared_preference.dart';
 import 'package:projek_mealdb/hive_model/myfavorite_model.dart';
 import 'package:projek_mealdb/image_picker/image_picker_section.dart';
 import 'package:projek_mealdb/model/ingredient_list_model.dart';
-import 'package:projek_mealdb/model/meal_category_list_model.dart';
 import 'package:projek_mealdb/source/meal_source.dart';
 
 class CreateRecipe extends StatefulWidget {
@@ -32,7 +31,13 @@ class _CreateRecipeState extends State<CreateRecipe> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Create Recipe"),
+        title: Text(
+          "Create Recipe",
+          style: TextStyle(
+              fontFamily: 'Caveat',
+              fontWeight: FontWeight.bold,
+              fontSize: 24.0),
+        ),
       ),
       body: _buildFormRecipe(),
     );
@@ -90,7 +95,9 @@ class _CreateRecipeState extends State<CreateRecipe> {
               height: MediaQuery.of(context).size.height - 400,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ImagePickerSection(img: '',),
+                child: ImagePickerSection(
+                  img: '',
+                ),
               ),
             ),
             SizedBox(
@@ -151,7 +158,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
                 _recipename = value;
               });
             },
-        charSize: 50),
+            charSize: 50),
         const SizedBox(
           height: 12,
         ),
@@ -176,7 +183,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
               });
             },
             maxLines: 10,
-        charSize: 200),
+            charSize: 200),
       ],
     );
   }
@@ -232,30 +239,33 @@ class _CreateRecipeState extends State<CreateRecipe> {
       child: ElevatedButton(
         onPressed: () async {
           bool check = _hiveRec.checkData(widget.username, _recipename);
-          if(_recipename.isEmpty || _searchController1.text.isEmpty || _searchController2.text.isEmpty || _searchController3.text.isEmpty || _insMeal.isEmpty){
+          if (_recipename.isEmpty ||
+              _searchController1.text.isEmpty ||
+              _searchController2.text.isEmpty ||
+              _searchController3.text.isEmpty ||
+              _insMeal.isEmpty) {
             _showToast("Please fill all field",
                 duration: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
-          }
-          else if (check == true){
+          } else if (check == true) {
             _showToast("Meal Recipe is already exist",
                 duration: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
-          }
-          else{
-          String img = await SharedPreference.getImage();
-          _hiveRec.addData(MyRecipeModel(
-              name: widget.username,
-              nameMeal: _recipename,
-              imageMeal: img,
-              ingMeal1: _searchController1.text,
-              ingMeal2: _searchController2.text,
-              ingMeal3: _searchController3.text,
-              insMeal: _insMeal));
-          Navigator.pop(context);
+          } else {
+            String img = await SharedPreference.getImage();
+            _hiveRec.addData(MyRecipeModel(
+                name: widget.username,
+                nameMeal: _recipename,
+                imageMeal: img,
+                ingMeal1: _searchController1.text,
+                ingMeal2: _searchController2.text,
+                ingMeal3: _searchController3.text,
+                insMeal: _insMeal));
+            Navigator.pop(context);
 
-          _searchController1.clear();
-          _searchController2.clear();
-          _searchController3.clear();
-        }},
+            _searchController1.clear();
+            _searchController2.clear();
+            _searchController3.clear();
+          }
+        },
         child: Text("Add"),
         style: ElevatedButton.styleFrom(
             padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
@@ -264,7 +274,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
     );
   }
 
-  void _showToast(String msg, {Toast? duration, ToastGravity? gravity}){
+  void _showToast(String msg, {Toast? duration, ToastGravity? gravity}) {
     Fluttertoast.showToast(msg: msg, toastLength: duration, gravity: gravity);
   }
 }

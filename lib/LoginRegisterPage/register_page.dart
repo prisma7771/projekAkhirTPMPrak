@@ -1,13 +1,8 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:projek_mealdb/helper/common_submit_button.dart';
 import 'package:projek_mealdb/helper/hive_database_user.dart';
 import 'package:projek_mealdb/hive_model/myfavorite_model.dart';
-
-import '../main.dart';
-
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -25,7 +20,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   void validateAndSave() {
     final FormState? form = _formKey.currentState;
-    if(form != null){
+    if (form != null) {
       if (form.validate()) {
         print('Form is valid');
       } else {
@@ -38,11 +33,17 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Register Page"),
+        title: const Text(
+          "Register Page",
+          style: TextStyle(
+              fontFamily: 'Caveat',
+              fontWeight: FontWeight.bold,
+              fontSize: 24.0),
+        ),
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: MediaQuery.of(context).size.height-80,
+          height: MediaQuery.of(context).size.height - 80,
           padding: const EdgeInsets.all(8),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -56,18 +57,27 @@ class _RegisterPageState extends State<RegisterPage> {
                     padding: const EdgeInsets.all(50.0),
                     child: CircleAvatar(
                       radius: 100,
-                      backgroundColor:  const Color(0xFFEFEFEF),
-                      backgroundImage: Image.asset('assets/images/logo1.png',  fit: BoxFit.cover,).image,
+                      backgroundColor: const Color(0xFFEFEFEF),
+                      backgroundImage: Image.asset(
+                        'assets/images/logo1.png',
+                        fit: BoxFit.cover,
+                      ).image,
                     ),
                   )),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
-                child: Center(child: Text("REGISTRATION FORM", style: TextStyle(fontSize: 34, fontFamily: 'OpenSans'),),),
+                child: Center(
+                  child: Text(
+                    "REGISTRATION FORM",
+                    style: TextStyle(fontSize: 34, fontFamily: 'OpenSans'),
+                  ),
+                ),
               ),
               Form(
                 key: _formKey,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical:16,horizontal: 24.0),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 16, horizontal: 24.0),
                   child: TextFormField(
                     controller: _usernameController,
                     decoration: const InputDecoration(
@@ -79,20 +89,18 @@ class _RegisterPageState extends State<RegisterPage> {
                       enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(width: 3, color: Colors.grey),
                           borderRadius:
-                          BorderRadius.all(Radius.circular(25.0))
-                      ),
+                              BorderRadius.all(Radius.circular(25.0))),
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(width: 3, color: Colors.grey),
                           borderRadius:
-                          BorderRadius.all(Radius.circular(25.0))
-                      ),
-
+                              BorderRadius.all(Radius.circular(25.0))),
                     ),
                   ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical:16,horizontal: 24.0),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 16, horizontal: 24.0),
                 child: TextFormField(
                   controller: _passwordController,
                   decoration: const InputDecoration(
@@ -103,13 +111,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     hintStyle: TextStyle(color: Colors.black87),
                     enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(width: 3, color: Colors.grey),
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(25.0))),
+                        borderRadius: BorderRadius.all(Radius.circular(25.0))),
                     focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(width: 3, color: Colors.grey),
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(25.0))
-                    ),
+                        borderRadius: BorderRadius.all(Radius.circular(25.0))),
                   ),
                   obscureText: true,
                 ),
@@ -129,27 +134,25 @@ class _RegisterPageState extends State<RegisterPage> {
     return CommonSubmitButton(
       labelButton: "REGISTER",
       submitCallback: (value) {
-        if(_usernameController.text == "" || _passwordController.text == ""){
+        if (_usernameController.text == "" || _passwordController.text == "") {
           _showToast("Field Tidak Boldeh Kosong",
               duration: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
           return;
         }
         isExist = _hive.checkUsers(_usernameController.text);
-        if (isExist == false && _usernameController.text.isNotEmpty && _passwordController.text.isNotEmpty) {
-          _hive.addData(
-              UserAccountModel(
-                  username: _usernameController.text,
-                  password: _passwordController.text,
-
-              )
-          );
+        if (isExist == false &&
+            _usernameController.text.isNotEmpty &&
+            _passwordController.text.isNotEmpty) {
+          _hive.addData(UserAccountModel(
+            username: _usernameController.text,
+            password: _passwordController.text,
+          ));
           _usernameController.clear();
           _passwordController.clear();
           setState(() {});
 
           Navigator.pop(context);
-        }
-        else{
+        } else {
           _showToast("Akun Sudah Ada",
               duration: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
         }
@@ -157,7 +160,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  void _showToast(String msg, {Toast? duration, ToastGravity? gravity}){
+  void _showToast(String msg, {Toast? duration, ToastGravity? gravity}) {
     Fluttertoast.showToast(msg: msg, toastLength: duration, gravity: gravity);
   }
 }

@@ -14,7 +14,11 @@ class DetailPage extends StatefulWidget {
   final MealList data;
   final String username;
   final int index;
-  const DetailPage({Key? key, required this.data, required this.index, required this.username})
+  const DetailPage(
+      {Key? key,
+      required this.data,
+      required this.index,
+      required this.username})
       : super(key: key);
 
   @override
@@ -29,8 +33,7 @@ class _DetailPageState extends State<DetailPage> {
   @override
   void initState() {
     isFavorite = _hiveFav.checkFavorite(
-        widget.username,"${widget.data.meals![no].idMeal}");
-    debugPrint(widget.username+"dan"+ "$isFavorite");
+        widget.username, "${widget.data.meals![no].idMeal}");
     super.initState();
   }
 
@@ -39,7 +42,12 @@ class _DetailPageState extends State<DetailPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            "Detail of ${widget.data.meals?[no].strMeal}".toTitleCase()),
+          "Detail of ${widget.data.meals?[no].strMeal}".toTitleCase(),
+          style: TextStyle(
+              fontFamily: 'Caveat',
+              fontWeight: FontWeight.bold,
+              fontSize: 24.0),
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -56,7 +64,10 @@ class _DetailPageState extends State<DetailPage> {
                   isFavorite = true;
                 });
               } else if (isFavorite == true) {
-                _hiveFav.deleteData(widget.username, "${widget.data.meals![no].idMeal}",);
+                _hiveFav.deleteData(
+                  widget.username,
+                  "${widget.data.meals![no].idMeal}",
+                );
                 setState(() {
                   isFavorite = false;
                 });
@@ -67,17 +78,21 @@ class _DetailPageState extends State<DetailPage> {
                 ? Icon(Icons.favorite)
                 : Icon(Icons.favorite_border),
           ),
-          IconButton(onPressed: () async {
-            String username  = await SharedPreference.getUsername();
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => HomePage(
-                    username: username,
-                  )),
-                  (_) => false,
-            );
-          }, icon: const Icon(Icons.home), iconSize: 30,)
+          IconButton(
+            onPressed: () async {
+              String username = await SharedPreference.getUsername();
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => HomePage(
+                          username: username,
+                        )),
+                (_) => false,
+              );
+            },
+            icon: const Icon(Icons.home),
+            iconSize: 30,
+          )
         ],
       ),
       body: _buildDetailMeal(),
@@ -85,7 +100,6 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Widget _buildDetailMeal() {
-    debugPrint("${widget.data.meals?[no].idMeal}");
     return FutureBuilder(
         future: MealSource.instance
             .loadDetail(idMeal: "${widget.data.meals?[no].idMeal}"),
@@ -217,23 +231,37 @@ class _DetailPageState extends State<DetailPage> {
 
   Widget _buildIngredient(MealDetail data) {
     List<String> value = [
-      "${data.meals![0].strIngredient1}", "${data.meals![0].strIngredient2}",
-      "${data.meals![0].strIngredient3}", "${data.meals![0].strIngredient4}",
-      "${data.meals![0].strIngredient5}", "${data.meals![0].strIngredient6}",
-      "${data.meals![0].strIngredient7}", "${data.meals![0].strIngredient8}",
-      "${data.meals![0].strIngredient9}", "${data.meals![0].strIngredient10}",
-      "${data.meals![0].strIngredient11}", "${data.meals![0].strIngredient12}",
-      "${data.meals![0].strIngredient13}", "${data.meals![0].strIngredient14}",
+      "${data.meals![0].strIngredient1}",
+      "${data.meals![0].strIngredient2}",
+      "${data.meals![0].strIngredient3}",
+      "${data.meals![0].strIngredient4}",
+      "${data.meals![0].strIngredient5}",
+      "${data.meals![0].strIngredient6}",
+      "${data.meals![0].strIngredient7}",
+      "${data.meals![0].strIngredient8}",
+      "${data.meals![0].strIngredient9}",
+      "${data.meals![0].strIngredient10}",
+      "${data.meals![0].strIngredient11}",
+      "${data.meals![0].strIngredient12}",
+      "${data.meals![0].strIngredient13}",
+      "${data.meals![0].strIngredient14}",
       "${data.meals![0].strIngredient15}",
     ];
     List<String> valueMeasure = [
-      "${data.meals![0].strMeasure1}", "${data.meals![0].strMeasure2}",
-      "${data.meals![0].strMeasure3}", "${data.meals![0].strMeasure4}",
-      "${data.meals![0].strMeasure5}", "${data.meals![0].strMeasure6}",
-      "${data.meals![0].strMeasure7}", "${data.meals![0].strMeasure8}",
-      "${data.meals![0].strMeasure9}", "${data.meals![0].strMeasure10}",
-      "${data.meals![0].strMeasure11}", "${data.meals![0].strMeasure12}",
-      "${data.meals![0].strMeasure13}", "${data.meals![0].strMeasure14}",
+      "${data.meals![0].strMeasure1}",
+      "${data.meals![0].strMeasure2}",
+      "${data.meals![0].strMeasure3}",
+      "${data.meals![0].strMeasure4}",
+      "${data.meals![0].strMeasure5}",
+      "${data.meals![0].strMeasure6}",
+      "${data.meals![0].strMeasure7}",
+      "${data.meals![0].strMeasure8}",
+      "${data.meals![0].strMeasure9}",
+      "${data.meals![0].strMeasure10}",
+      "${data.meals![0].strMeasure11}",
+      "${data.meals![0].strMeasure12}",
+      "${data.meals![0].strMeasure13}",
+      "${data.meals![0].strMeasure14}",
       "${data.meals![0].strMeasure15}",
     ];
 

@@ -1,19 +1,8 @@
-import 'dart:async';
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
-import 'package:projek_mealdb/helper/hive_database_fav.dart';
-import 'package:projek_mealdb/helper/hive_database_recipe.dart';
 import 'package:projek_mealdb/helper/shared_preference.dart';
-import 'package:projek_mealdb/hive_model/myfavorite_model.dart';
-import 'package:projek_mealdb/model/meal_detail_model.dart';
-import 'package:projek_mealdb/model/meal_list_model.dart';
-import 'package:projek_mealdb/source/meal_source.dart';
 import 'package:projek_mealdb/view/meal_category.dart';
-
-import '../main.dart';
 import 'home_page.dart';
 import 'meal_list_page.dart';
 
@@ -28,7 +17,6 @@ class MyRecipeDetailPage extends StatefulWidget {
 }
 
 class _MyRecipeDetailPageState extends State<MyRecipeDetailPage> {
-  final HiveDatabaseRecipe _hiveFav = HiveDatabaseRecipe();
   late int index = widget.index;
 
   @override
@@ -175,7 +163,7 @@ class _MyRecipeDetailPageState extends State<MyRecipeDetailPage> {
       "${widget.list[index].ingMeal3}",
       "${widget.list[index].ingMeal2}"
     ];
-    int i = 0;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
       child: Container(

@@ -1,17 +1,11 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:projek_mealdb/helper/hive_database_fav.dart';
 import 'package:projek_mealdb/helper/shared_preference.dart';
 import 'package:projek_mealdb/hive_model/myfavorite_model.dart';
 import 'package:projek_mealdb/model/meal_detail_model.dart';
-import 'package:projek_mealdb/model/meal_list_model.dart';
 import 'package:projek_mealdb/source/meal_source.dart';
 import 'package:projek_mealdb/view/meal_category.dart';
-
-import '../main.dart';
 import 'home_page.dart';
 import 'meal_list_page.dart';
 
@@ -42,7 +36,13 @@ class _FavoriteDetailPageState extends State<FavoriteDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Details of ${widget.list[index].nameMeal}".toTitleCase()),
+        title: Text(
+          "Details of ${widget.list[index].nameMeal}".toTitleCase(),
+          style: TextStyle(
+              fontFamily: 'Caveat',
+              fontWeight: FontWeight.bold,
+              fontSize: 24.0),
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -228,23 +228,37 @@ class _FavoriteDetailPageState extends State<FavoriteDetailPage> {
 
   Widget _buildIngredient(MealDetail data) {
     List<String> value = [
-      "${data.meals![0].strIngredient1}", "${data.meals![0].strIngredient2}",
-      "${data.meals![0].strIngredient3}", "${data.meals![0].strIngredient4}",
-      "${data.meals![0].strIngredient5}", "${data.meals![0].strIngredient6}",
-      "${data.meals![0].strIngredient7}", "${data.meals![0].strIngredient8}",
-      "${data.meals![0].strIngredient9}", "${data.meals![0].strIngredient10}",
-      "${data.meals![0].strIngredient11}", "${data.meals![0].strIngredient12}",
-      "${data.meals![0].strIngredient13}", "${data.meals![0].strIngredient14}",
+      "${data.meals![0].strIngredient1}",
+      "${data.meals![0].strIngredient2}",
+      "${data.meals![0].strIngredient3}",
+      "${data.meals![0].strIngredient4}",
+      "${data.meals![0].strIngredient5}",
+      "${data.meals![0].strIngredient6}",
+      "${data.meals![0].strIngredient7}",
+      "${data.meals![0].strIngredient8}",
+      "${data.meals![0].strIngredient9}",
+      "${data.meals![0].strIngredient10}",
+      "${data.meals![0].strIngredient11}",
+      "${data.meals![0].strIngredient12}",
+      "${data.meals![0].strIngredient13}",
+      "${data.meals![0].strIngredient14}",
       "${data.meals![0].strIngredient15}",
     ];
     List<String> valueMeasure = [
-      "${data.meals![0].strMeasure1}", "${data.meals![0].strMeasure2}",
-      "${data.meals![0].strMeasure3}", "${data.meals![0].strMeasure4}",
-      "${data.meals![0].strMeasure5}", "${data.meals![0].strMeasure6}",
-      "${data.meals![0].strMeasure7}", "${data.meals![0].strMeasure8}",
-      "${data.meals![0].strMeasure9}", "${data.meals![0].strMeasure10}",
-      "${data.meals![0].strMeasure11}", "${data.meals![0].strMeasure12}",
-      "${data.meals![0].strMeasure13}", "${data.meals![0].strMeasure14}",
+      "${data.meals![0].strMeasure1}",
+      "${data.meals![0].strMeasure2}",
+      "${data.meals![0].strMeasure3}",
+      "${data.meals![0].strMeasure4}",
+      "${data.meals![0].strMeasure5}",
+      "${data.meals![0].strMeasure6}",
+      "${data.meals![0].strMeasure7}",
+      "${data.meals![0].strMeasure8}",
+      "${data.meals![0].strMeasure9}",
+      "${data.meals![0].strMeasure10}",
+      "${data.meals![0].strMeasure11}",
+      "${data.meals![0].strMeasure12}",
+      "${data.meals![0].strMeasure13}",
+      "${data.meals![0].strMeasure14}",
       "${data.meals![0].strMeasure15}",
     ];
     value.removeWhere((value) => value == "");
@@ -252,7 +266,6 @@ class _FavoriteDetailPageState extends State<FavoriteDetailPage> {
     valueMeasure.removeWhere((value) => value == "");
     valueMeasure.removeWhere((value) => value == "null");
 
-    int i = 0;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
       child: Container(

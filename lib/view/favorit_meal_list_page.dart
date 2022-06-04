@@ -1,20 +1,11 @@
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:projek_mealdb/helper/hive_database_fav.dart';
-import 'package:projek_mealdb/helper/search_bar.dart';
 import 'package:projek_mealdb/helper/shared_preference.dart';
-import 'package:projek_mealdb/hive_model/myfavorite_model.dart';
-import 'package:projek_mealdb/model/meal_list_model.dart';
-import 'package:projek_mealdb/source/meal_source.dart';
 import 'package:projek_mealdb/view/meal_category.dart';
-import '../main.dart';
-import 'detail_page.dart';
 import 'favorite_detail_page.dart';
 import 'home_page.dart';
-
 
 class MyFavoritPage extends StatefulWidget {
   final String name;
@@ -31,84 +22,88 @@ class _MyFavoritPageState extends State<MyFavoritPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("My Favorite Meals"),
+        title: Text(
+          "My Favorite Meals",
+          style: TextStyle(
+              fontFamily: 'Caveat',
+              fontWeight: FontWeight.bold,
+              fontSize: 24.0),
+        ),
         actions: [
-          IconButton(onPressed: () async {
-            String username  = await SharedPreference.getUsername();
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => HomePage(
-                    username: username,
-                  )),
-                  (_) => false,
-            );
-          }, icon: const Icon(Icons.home), iconSize: 30,)
+          IconButton(
+            onPressed: () async {
+              String username = await SharedPreference.getUsername();
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => HomePage(
+                          username: username,
+                        )),
+                (_) => false,
+              );
+            },
+            icon: const Icon(Icons.home),
+            iconSize: 30,
+          )
         ],
       ),
       body: _buildList(),
     );
   }
 
-  Widget _buildList(){
-    int check = _hiveFav.getLength(widget.name);
+  Widget _buildList() {
     return Container(
       height: MediaQuery.of(context).size.height,
-        child: ValueListenableBuilder(
-          valueListenable: _hiveFav.listenable(),
-          builder: (BuildContext context, Box<dynamic> value, Widget? child){
-            if(value.isEmpty ||  check == 0){
-              return Center(
-                child: Text("Data Kosong"),
-              );
-            }
-            debugPrint(widget.name);
-            return _buildSuccessSection(_hiveFav);
-          },
-        ),
-      );
+      child: ValueListenableBuilder(
+        valueListenable: _hiveFav.listenable(),
+        builder: (BuildContext context, Box<dynamic> value, Widget? child) {
+          return _buildSuccessSection(_hiveFav);
+        },
+      ),
+    );
   }
 
   Widget _buildSuccessSection(HiveDatabaseFav _hiveFav) {
+    int jml = _hiveFav.getLength(widget.name);
     return Container(
       height: MediaQuery.of(context).size.height,
       child: Column(
         children: [
           Expanded(
-            child:  ListView.builder(
-                itemCount: _hiveFav.getLength(widget.name),
-                itemBuilder: (BuildContext context, int index){
-                  List filteredUsers = _hiveFav.values()
-                      .where((_localDB) => _localDB.name == widget.name)
-                      .toList();
-                  return Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    clipBehavior: Clip.antiAlias,
-                    child: Container(
-                        decoration:
-                        BoxDecoration(
-                          border: Border.all(color: Colors.brown.shade800, width: 3.0,),
-                          borderRadius: BorderRadius.circular(15),
-                          color: Colors.brown.withOpacity(0.7),
-                        ),
-                        child: InkWell(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                  MaterialPageRoute(builder: (context) {
-                                    return FavoriteDetailPage(
-                                        list: filteredUsers,
-                                        index: index);
-                                  })
-                              );
-                            },
-                            child: _buildItemList(
-                                filteredUsers, index
-                            ))),
-                  );
-                })
-          ),
+              child: jml == 0
+                  ? Center(child: Text("Data Kosong"))
+                  : ListView.builder(
+                      itemCount: _hiveFav.getLength(widget.name),
+                      itemBuilder: (BuildContext context, int index) {
+                        List filteredUsers = _hiveFav
+                            .values()
+                            .where((_localDB) => _localDB.name == widget.name)
+                            .toList();
+                        return Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          clipBehavior: Clip.antiAlias,
+                          child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.brown.shade800,
+                                  width: 3.0,
+                                ),
+                                borderRadius: BorderRadius.circular(15),
+                                color: Colors.brown.withOpacity(0.7),
+                              ),
+                              child: InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (context) {
+                                      return FavoriteDetailPage(
+                                          list: filteredUsers, index: index);
+                                    }));
+                                  },
+                                  child: _buildItemList(filteredUsers, index))),
+                        );
+                      })),
         ],
       ),
     );
@@ -140,14 +135,15 @@ class _MyFavoritPageState extends State<MyFavoritPage> {
               ),
             ),
           ),
-          Expanded(child: Padding(
+          Expanded(
+              child: Padding(
             padding: const EdgeInsets.all(14.0),
-            child: Text("${filteredUsers[index].nameMeal}".toTitleCase(), style: const TextStyle(fontSize: 28.0)),
+            child: Text("${filteredUsers[index].nameMeal}".toTitleCase(),
+                style: const TextStyle(fontSize: 28.0)),
           )),
         ],
       ),
     );
     return text;
   }
-
 }

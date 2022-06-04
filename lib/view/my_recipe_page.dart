@@ -3,14 +3,12 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:projek_mealdb/helper/hive_database_fav.dart';
 import 'package:projek_mealdb/helper/hive_database_recipe.dart';
 import 'package:projek_mealdb/helper/shared_preference.dart';
 import 'package:projek_mealdb/view/create_recipe_page.dart';
 import 'package:projek_mealdb/view/meal_category.dart';
 import 'package:projek_mealdb/view/recipe_detail_page.dart';
 import 'edit_recipe_page.dart';
-import 'favorite_detail_page.dart';
 import 'home_page.dart';
 
 class MyRecipePage extends StatefulWidget {
@@ -29,7 +27,13 @@ class _MyRecipePageState extends State<MyRecipePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("My Recipe"),
+        title: Text(
+          "My Recipe",
+          style: TextStyle(
+              fontFamily: 'Caveat',
+              fontWeight: FontWeight.bold,
+              fontSize: 24.0),
+        ),
         actions: [
           IconButton(
             onPressed: () async {
@@ -103,7 +107,7 @@ class _MyRecipePageState extends State<MyRecipePage> {
             ),
           ]),
           Container(
-            height: MediaQuery.of(context).size.height-220,
+            height: MediaQuery.of(context).size.height - 220,
             child: ValueListenableBuilder(
               valueListenable: _hiveRec.listenable(),
               builder:
@@ -122,38 +126,40 @@ class _MyRecipePageState extends State<MyRecipePage> {
     int jml = _hiveRec.getLength(widget.name);
     return Container(
       height: MediaQuery.of(context).size.height,
-      child: jml == 0 ? Center(child: Text("Data Kosong")) : ListView.builder(
-          itemCount: jml,
-          itemBuilder: (BuildContext context, int index) {
-            List filteredUsers = _hiveRec
-                .values()
-                .where((_localDB) => _localDB.name == widget.name)
-                .toList();
-            return Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.brown.shade800,
-                      width: 3.0,
-                    ),
+      child: jml == 0
+          ? Center(child: Text("Data Kosong"))
+          : ListView.builder(
+              itemCount: jml,
+              itemBuilder: (BuildContext context, int index) {
+                List filteredUsers = _hiveRec
+                    .values()
+                    .where((_localDB) => _localDB.name == widget.name)
+                    .toList();
+                return Card(
+                  shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
-                    color: Colors.brown.withOpacity(0.7),
                   ),
-                  child: InkWell(
-                      onTap: () {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) {
-                          return MyRecipeDetailPage(
-                              list: filteredUsers, index: index);
-                        }));
-                      },
-                      child: _buildItemList(filteredUsers, index))),
-            );
-          }),
+                  clipBehavior: Clip.antiAlias,
+                  child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.brown.shade800,
+                          width: 3.0,
+                        ),
+                        borderRadius: BorderRadius.circular(15),
+                        color: Colors.brown.withOpacity(0.7),
+                      ),
+                      child: InkWell(
+                          onTap: () {
+                            Navigator.of(context)
+                                .push(MaterialPageRoute(builder: (context) {
+                              return MyRecipeDetailPage(
+                                  list: filteredUsers, index: index);
+                            }));
+                          },
+                          child: _buildItemList(filteredUsers, index))),
+                );
+              }),
     );
   }
 
@@ -199,11 +205,11 @@ class _MyRecipePageState extends State<MyRecipePage> {
             child: Text("${filteredUsers[index].nameMeal}".toTitleCase(),
                 style: const TextStyle(fontSize: 28.0)),
           )),
-           Center(
+          Center(
             child: Container(
               width: 50,
               child: InkWell(
-                onTap: (){
+                onTap: () {
                   _hiveRec.deleteData(name, "${filteredUsers[index].nameMeal}");
                 },
                 child: Icon(
@@ -218,10 +224,11 @@ class _MyRecipePageState extends State<MyRecipePage> {
             child: Container(
               width: 50,
               child: InkWell(
-                onTap: (){
+                onTap: () {
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (context) {
-                    return EditRecipe(username: name, index: index, list: filteredUsers);
+                    return EditRecipe(
+                        username: name, index: index, list: filteredUsers);
                   }));
                 },
                 child: Icon(

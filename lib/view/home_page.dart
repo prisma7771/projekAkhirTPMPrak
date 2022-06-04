@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:projek_mealdb/LoginRegisterPage/login_page.dart';
 import 'package:projek_mealdb/helper/search_bar.dart';
 import 'package:projek_mealdb/helper/shared_preference.dart';
-import 'package:projek_mealdb/transit/change_page_login.dart';
 import 'package:projek_mealdb/view/meal_area.dart';
 import 'package:projek_mealdb/view/meal_category.dart';
 import 'package:projek_mealdb/view/meal_ingredient.dart';
@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const ChangePageLogin()),
+                        builder: (context) => const LoginPage()),
                     (_) => false,
                   );
                 },

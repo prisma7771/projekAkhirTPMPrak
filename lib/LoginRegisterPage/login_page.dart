@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -7,7 +5,6 @@ import 'package:projek_mealdb/LoginRegisterPage/register_page.dart';
 import 'package:projek_mealdb/helper/common_submit_button.dart';
 import 'package:projek_mealdb/helper/hive_database_user.dart';
 import 'package:projek_mealdb/helper/shared_preference.dart';
-import 'package:projek_mealdb/main.dart';
 import 'package:projek_mealdb/view/home_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -18,14 +15,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   void validateAndSave() {
     final FormState? form = _formKey.currentState;
-    if(form != null){
+    if (form != null) {
       if (form.validate()) {
         print('Form is valid');
       } else {
@@ -36,117 +32,132 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        child: Form(
-          key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(8,4,8,8),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 20),
-                  child: Container(
-                    // height:300.0,
-                    // width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                        border: Border.all(width: 6, color: Colors.orange),
-                        borderRadius: BorderRadius.circular(200),
-                    ),
-
-                    child: Padding(
-                      padding: const EdgeInsets.all(50.0),
-                      child: CircleAvatar(
-                      radius: 100,
-                        backgroundColor:  const Color(0xFFEFEFEF),
-                        backgroundImage: Image.asset('assets/images/logo1.png',  fit: BoxFit.cover,).image,
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Login Page",
+          style: TextStyle(
+              fontFamily: 'Caveat',
+              fontWeight: FontWeight.bold,
+              fontSize: 24.0),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          child: Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 0, 8, 20),
+                    child: Container(
+                        // height:300.0,
+                        // width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 6, color: Colors.orange),
+                          borderRadius: BorderRadius.circular(200),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(50.0),
+                          child: CircleAvatar(
+                            radius: 100,
+                            backgroundColor: const Color(0xFFEFEFEF),
+                            backgroundImage: Image.asset(
+                              'assets/images/logo1.png',
+                              fit: BoxFit.cover,
+                            ).image,
+                          ),
+                        )),
                   ),
-                    )),
-                ),
-            Center(
-                child: Stack(
-                  children: [
-                    // The text border
-                    Center(
-                      child: Text(
-                        'Our Meal\nRecipe!!!',
-                        style: TextStyle(
-                          fontSize: 50,
-                          fontFamily: 'OpenSans',
-                          letterSpacing: 5,
-                          fontWeight: FontWeight.bold,
-                          foreground: Paint()
-                            ..style = PaintingStyle.stroke
-                            ..strokeWidth = 10
-                            ..color = Colors.orange.shade700,
+                  Center(
+                      child: Stack(
+                    children: [
+                      // The text border
+                      Center(
+                        child: Text(
+                          'Our Meal\nRecipe!!!',
+                          style: TextStyle(
+                            fontSize: 50,
+                            fontFamily: 'OpenSans',
+                            letterSpacing: 5,
+                            fontWeight: FontWeight.bold,
+                            foreground: Paint()
+                              ..style = PaintingStyle.stroke
+                              ..strokeWidth = 10
+                              ..color = Colors.orange.shade700,
+                          ),
                         ),
                       ),
-                    ),
-                    // The text inside
-                    const Center(
-                      child: Text(
-                        'Our Meal\nRecipe!!!',
-                        style: TextStyle(
-                          fontSize: 50,
-                          fontFamily: 'OpenSans',
-                          letterSpacing: 5,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                      // The text inside
+                      const Center(
+                        child: Text(
+                          'Our Meal\nRecipe!!!',
+                          style: TextStyle(
+                            fontSize: 50,
+                            fontFamily: 'OpenSans',
+                            letterSpacing: 5,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                )),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24),
-                  child: TextFormField(
-                    controller: _usernameController,
-                    decoration: const InputDecoration(
-                      fillColor: Colors.white,
-                      labelStyle: TextStyle(color: Colors.black54),
+                    ],
+                  )),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 24),
+                    child: TextFormField(
+                      controller: _usernameController,
+                      decoration: const InputDecoration(
+                        fillColor: Colors.white,
+                        labelStyle: TextStyle(color: Colors.black54),
                         labelText: "USERNAME",
                         hintText: "USERNAME",
                         hintStyle: TextStyle(color: Colors.black87),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(width: 3, color: Colors.grey),
+                            borderSide:
+                                BorderSide(width: 3, color: Colors.grey),
                             borderRadius:
-                            BorderRadius.all(Radius.circular(25.0))
-                        ),
+                                BorderRadius.all(Radius.circular(25.0))),
                         focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(width: 3, color: Colors.grey),
+                            borderSide:
+                                BorderSide(width: 3, color: Colors.grey),
                             borderRadius:
-                            BorderRadius.all(Radius.circular(25.0))
-                        ),
+                                BorderRadius.all(Radius.circular(25.0))),
+                      ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    controller: _passwordController,
-                    decoration: const InputDecoration(
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      controller: _passwordController,
+                      decoration: const InputDecoration(
                         fillColor: Colors.white,
                         labelStyle: TextStyle(color: Colors.black54),
                         label: Text("PASSWORD"),
                         hintText: "PASSWORD",
                         hintStyle: TextStyle(color: Colors.black87),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(width: 3, color: Colors.grey),
+                            borderSide:
+                                BorderSide(width: 3, color: Colors.grey),
                             borderRadius:
-                            BorderRadius.all(Radius.circular(25.0))),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(width: 3, color: Colors.grey),
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(25.0))
+                                BorderRadius.all(Radius.circular(25.0))),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(width: 3, color: Colors.grey),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(25.0))),
                       ),
+                      obscureText: true,
                     ),
-                    obscureText: true,
                   ),
-                ),
-                _buildLoginButton(),
-                _buildRegisterButton(),
-              ],
+                  _buildLoginButton(),
+                  _buildRegisterButton(),
+                ],
+              ),
             ),
           ),
         ),
@@ -163,11 +174,10 @@ class _LoginPageState extends State<LoginPage> {
           validateAndSave();
           String currentUsername = _usernameController.value.text;
           String currentPassword = _passwordController.value.text;
-          if(currentUsername == "" || currentPassword == ""){
+          if (currentUsername == "" || currentPassword == "") {
             _showToast("Field Tidak Boldeh Kosong",
                 duration: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
-          }
-          else {
+          } else {
             _processLogin(currentUsername, currentPassword);
           }
         },
@@ -196,57 +206,20 @@ class _LoginPageState extends State<LoginPage> {
     bool found = false;
 
     found = _hive.checkLogin(username, password);
-    if(!found) {
+    if (!found) {
       _showToast("Akun Tidak Ada",
           duration: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
-    } else{
+    } else {
       SharedPreference().setLogin(username, password);
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => HomePage(username:username),
+          builder: (context) => HomePage(username: username),
         ),
       );
     }
   }
 
-  void _showToast(String msg, {Toast? duration, ToastGravity? gravity}){
+  void _showToast(String msg, {Toast? duration, ToastGravity? gravity}) {
     Fluttertoast.showToast(msg: msg, toastLength: duration, gravity: gravity);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

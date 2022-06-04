@@ -15,8 +15,12 @@ class IngredientsListPage extends StatefulWidget {
 }
 
 extension StringCasingExtension on String {
-  String toCapitalized() => length > 0 ?'${this[0].toUpperCase()}${substring(1).toLowerCase()}':'';
-  String toTitleCase() => replaceAll(RegExp(' +'), ' ').split(' ').map((str) => str.toCapitalized()).join(' ');
+  String toCapitalized() =>
+      length > 0 ? '${this[0].toUpperCase()}${substring(1).toLowerCase()}' : '';
+  String toTitleCase() => replaceAll(RegExp(' +'), ' ')
+      .split(' ')
+      .map((str) => str.toCapitalized())
+      .join(' ');
 }
 
 class _IngredientsListPageState extends State<IngredientsListPage> {
@@ -24,26 +28,36 @@ class _IngredientsListPageState extends State<IngredientsListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Ingredient List"),
+        title: const Text(
+          "Ingredient List:",
+          style: TextStyle(
+              fontFamily: 'Caveat',
+              fontWeight: FontWeight.bold,
+              fontSize: 24.0),
+        ),
         actions: [
-          IconButton(onPressed: () async {
-            String username  = await SharedPreference.getUsername();
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => HomePage(
-                    username: username,
-                  )),
-                  (_) => false,
-            );
-          }, icon: const Icon(Icons.home), iconSize: 30,)
+          IconButton(
+            onPressed: () async {
+              String username = await SharedPreference.getUsername();
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => HomePage(
+                          username: username,
+                        )),
+                (_) => false,
+              );
+            },
+            icon: const Icon(Icons.home),
+            iconSize: 30,
+          )
         ],
       ),
       body: _buildListIngredient(),
     );
   }
 
-  Widget _buildListIngredient(){
+  Widget _buildListIngredient() {
     return FutureBuilder(
         future: MealSource.instance.loadIngredient(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -52,7 +66,7 @@ class _IngredientsListPageState extends State<IngredientsListPage> {
           }
           if (snapshot.hasData) {
             IngredientList ingredientList =
-            IngredientList.fromJson(snapshot.data);
+                IngredientList.fromJson(snapshot.data);
             return _buildSuccessSection(ingredientList);
           }
           return _buildLoadingSection();
@@ -75,25 +89,28 @@ class _IngredientsListPageState extends State<IngredientsListPage> {
       itemCount: data.meals?.length,
       itemBuilder: (BuildContext context, int index) {
         return Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-        ),
-        clipBehavior: Clip.antiAlias,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            clipBehavior: Clip.antiAlias,
             child: Container(
-              decoration:
-              BoxDecoration(
-                border: Border.all(color: Colors.brown.shade800, width: 3.0,),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.brown.shade800,
+                  width: 3.0,
+                ),
                 borderRadius: BorderRadius.circular(15),
                 color: Colors.brown.withOpacity(0.7),
               ),
               child: InkWell(
                   borderRadius: BorderRadius.all(Radius.circular(50)),
                   onTap: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) {
-                          return MealListPage(value: "${data.meals?[index].strIngredient}", index: 2);
-                        })
-                    );
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) {
+                      return MealListPage(
+                          value: "${data.meals?[index].strIngredient}",
+                          index: 2);
+                    }));
                   },
                   child: _buildItemIngredient(
                     "${data.meals?[index].strIngredient}",
@@ -104,7 +121,8 @@ class _IngredientsListPageState extends State<IngredientsListPage> {
   }
 
   Widget _buildItemIngredient(String value) {
-    String imageUrl = "https://www.themealdb.com/images/ingredients/$value-Small.png";
+    String imageUrl =
+        "https://www.themealdb.com/images/ingredients/$value-Small.png";
     var text = SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Row(
@@ -129,9 +147,11 @@ class _IngredientsListPageState extends State<IngredientsListPage> {
               ),
             ),
           ),
-          Expanded(child: Padding(
+          Expanded(
+              child: Padding(
             padding: const EdgeInsets.all(14.0),
-            child: Text(value.toTitleCase(), style: const TextStyle(fontSize: 28.0)),
+            child: Text(value.toTitleCase(),
+                style: const TextStyle(fontSize: 28.0)),
           )),
           // Expanded(child: Text(value2.toTitleCase(), style: const TextStyle(fontSize: 26.0))),
         ],
@@ -140,4 +160,3 @@ class _IngredientsListPageState extends State<IngredientsListPage> {
     return text;
   }
 }
-
