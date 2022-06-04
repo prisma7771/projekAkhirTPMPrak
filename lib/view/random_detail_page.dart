@@ -16,11 +16,8 @@ class RandomDetailPage extends StatefulWidget {
 
 class _RandomDetailPageState extends State<RandomDetailPage> {
   bool isFavorite = false;
-  final HiveDatabaseFav _hiveFav = HiveDatabaseFav();
   @override
   Widget build(BuildContext context) {
-    _hiveFav.showAll();
-    debugPrint("${_hiveFav.getLengthAll()}");
     return Scaffold(
       appBar: AppBar(
         title: const Text(
