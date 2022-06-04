@@ -269,7 +269,7 @@ class _DetailPageState extends State<DetailPage> {
     value.removeWhere((value) => value == "null");
     valueMeasure.removeWhere((value) => value == "");
     valueMeasure.removeWhere((value) => value == "null");
-    
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
       child: Container(
